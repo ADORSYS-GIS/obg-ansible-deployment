@@ -1,0 +1,19 @@
+[Unit]
+Description=FinTech Server Service
+After=network.target postgresql.service
+
+[Service]
+User=root
+ExecStart=/usr/bin/java -jar /usr/share/java/fintech-server-1.0.2-SNAPSHOT-exec.jar
+Environment="SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/open_banking?currentSchema=fintech"
+Environment="SPRING_DATASOURCE_USERNAME=postgres"
+Environment="SPRING_DATASOURCE_PASSWORD=docker"
+Environment="TPP_URL=http://localhost:"
+Environment="FINTECH-UI_HOST=http://localhost:24200"
+SuccessExitStatus=143
+Restart=on-failure
+RestartSec=10
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target

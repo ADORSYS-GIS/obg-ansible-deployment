@@ -1,0 +1,42 @@
+- name: Ensure PostgreSQL is installed
+  apt:
+    name: postgresql
+    state: present
+
+- name: Stop any running PostgreSQL instances
+  systemd:
+    name: postgresql
+    state: stopped
+  ignore_errors: yes
+
+- name: Clean up existing PostgreSQL data directory
+  become_user: postgres
+  file:
+    path: /var/lib/postgresql/15/main
+    state: absent
+
+- name: Ensure PostgreSQL service is enabled and started
+  systemd:
+    name: postgresql
+    enabled: yes
+    state: started
+
+- name: Create Database and User
+  postgresql_db:
+    name: open_banking
+    owner: postgres
+  become_user: postgres
+
+- name: Set Password for Postgres User
+  postgresql_user:
+    db: open_banking
+    name: postgres
+    password: docker
+  become_user: postgres
+
+- name: Run Init SQL Files
+  become_user: postgres
+  command: psql -U postgres -d open_banking -f "{{ playbook_dir }}/roles/postgres/files/{{ item }}"
+  with_items:
+    - "init.sql"
+    - "fintech-init.sql"

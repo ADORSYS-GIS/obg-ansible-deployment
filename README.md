@@ -77,7 +77,7 @@ hostname -i
 whoami
 ```
 
-You'll need these details for the configuration (you'll be putting them in the **inventory** file).
+You'll need these details for the configuration. Replace **```your-host```** and **```your-username```** in the **```inventory```** file with the outputs of the above commands, respectively.
 
 ## Running the Deployment
 

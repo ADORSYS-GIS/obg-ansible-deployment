@@ -1,2 +1,2 @@
 [obg_servers]
-127.0.1.1 ansible_user=valantine ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+your-host ansible_user=your-username ansible_ssh_common_args='-o StrictHostKeyChecking=no'

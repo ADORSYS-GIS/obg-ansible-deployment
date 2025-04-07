@@ -69,7 +69,7 @@ After cloning, you'll need to gather some information for the setup:
 
 1. Get your computer's IP address:
 ```bash
-hostname -i
+hostname -I
 ```
 
 2. Get your username:

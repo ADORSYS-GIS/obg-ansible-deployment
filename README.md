@@ -67,31 +67,44 @@ git clone https://github.com/ADORSYS-GIS/obg-ansible-deployment.git
 
 After cloning, you'll need to gather some information for the setup:
 
-1. Get your computer's IP address:
+- Get your computer's IP address:
 ```bash
 hostname -I
 ```
-
-2. Get your username:
-```bash
-whoami
-```
-
-You'll need these details for the configuration. Replace **```your-host```** and **```your-username```** in the **```inventory```** file with the outputs of the above commands, respectively.
+You'll need this for the configuration. Replace **```your-host```** in the **```inventory```** file with the output of the above command.
 
 ## Running the Deployment
 
-1. Navigate to the project directory:
+#### 1. Navigate to the project directory:
 ```bash
 cd obg-ansible-deployment
 ```
 
-2. Make the script executable:
+#### 2. Set correct file ownership for the **```obg```** user:
+Before continuing, make sure the **obg** user has ownership over the project directory. This is required so the **obg** user can execute the deployment script after the setup. <br>
+Replace the path below with the correct path to your cloned repository:
+```bash
+sudo chown -R obg:obg /home/your-username/path-to/obg-ansible-deployment
+```
+
+####  3. Run the OBG setup script
+```bash
+sudo ./setup_obg_user.sh
+```
+ℹ️ Once the script completes, you will automatically be switched to the obg user inside the project directory.
+
+This script will:
+- Ensure necessary dependencies are installed
+- Create and configure the obg system user
+- Set up SSH access
+- Configure sudo access
+- Switch to the obg user at the end
+
+#### 4. Run the deployment script
 ```bash
 chmod +x test.sh
 ```
 
-3. Run the deployment script:
 ```bash
 ./test.sh
 ```

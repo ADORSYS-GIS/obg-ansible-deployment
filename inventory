@@ -1,2 +1,2 @@
 [obg_servers]
-your-host ansible_user=your-username ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+your-host ansible_user=obg ansible_ssh_common_args='-o StrictHostKeyChecking=no'

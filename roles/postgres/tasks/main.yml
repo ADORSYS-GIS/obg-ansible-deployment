@@ -14,6 +14,7 @@
   file:
     path: /var/lib/postgresql/15/main
     state: absent
+  when: clean_postgres | default(false)
 
 - name: Ensure PostgreSQL service is enabled and started
   systemd:

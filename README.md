@@ -112,6 +112,11 @@ Replace the path below with the correct path to your cloned repository:
 sudo chown -R obg:obg /home/your-username/path-to/obg-ansible-deployment
 ```
 
+You can get the path by running the following;
+```bash
+pwd
+```
+
 #### 4. Run the deployment script
 ```bash
 chmod +x test.sh

@@ -1,24 +1,14 @@
-name: Deploy with Ansible
+name: Use POSTGRES_PASSWORD Secret
 
 on:
-  push:
-    branches: [main]  # adjust as needed
+  workflow_dispatch:  # manual trigger only
 
 jobs:
-  deploy:
+  show-env:
     runs-on: ubuntu-latest
-
     env:
       POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.x'
-
-      - name: Install Ansible
-        run: pip install ansible
+      - name: Show that the secret is available (don't actually print it!)
+        run: echo "Secret is set and ready to use!"

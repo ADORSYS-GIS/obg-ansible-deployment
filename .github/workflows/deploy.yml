@@ -1,0 +1,26 @@
+name: Deploy with Ansible
+
+on:
+  push:
+    branches: [main]  # or any other branch you want to trigger this on
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}  
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install Ansible
+        run: pip install ansible
+
+      - name: Run Ansible Playbook
+        run: ansible-playbook -i inventory playbook.yml --ask-pass --ask-become-pass

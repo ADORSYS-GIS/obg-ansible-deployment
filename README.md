@@ -33,6 +33,18 @@ java -version
 
 You should see output showing Java 21 is installed.
 
+### 2. Python Version
+The Ansible scripts require **Python 3.10 or higher** to run reliably.
+
+To check your Python version:
+```bash
+python3 --version
+```
+If your version is lower than 3.10, install Python 3.10+ using:
+```bash
+sudo apt install python3.10
+```
+
 ### 2. SSH Setup
 The deployment script will automatically install SSH if it's not already installed. However, if you want to verify your SSH setup:
 

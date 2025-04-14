@@ -1,7 +1,7 @@
 ---
     - name: Deploy OBG signing key
       copy:
-        src: /etc/apt/keyrings/obg.gpg
+        src: obg.gpg
         dest: /etc/apt/keyrings/obg.gpg
         owner: root
         group: root

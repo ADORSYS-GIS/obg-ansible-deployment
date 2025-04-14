@@ -31,7 +31,7 @@
   postgresql_user:
     db: open_banking
     name: postgres
-    password: "{{ lookup('env', 'POSTGRES_PASSWORD') }}"
+    password: "{{ postgres_password }}"
   become_user: postgres
 
 - name: Run Init SQL Files

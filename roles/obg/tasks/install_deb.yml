@@ -1,10 +1,53 @@
 ---
+    - name: Deploy OBG signing key
+      copy:
+        src: /etc/apt/keyrings/obg.gpg
+        dest: /etc/apt/keyrings/obg.gpg
+        owner: root
+        group: root
+        mode: 0644
 
-    - name: Install Open Banking Gateway Debian package
+    - name: Add Open Banking Gateway APT repo
+      deb822_repository:
+        name: OBG
+        types: deb
+        uris: http://192.168.2.17/debian
+        suites: jammy
+        components:
+          - main
+        architectures: amd64
+        signed_by: /etc/apt/keyrings/obg.gpg
+
+    - name: Clean up packages
       apt:
-        deb: "{{ role_path }}/files/opba-embedded-starter_1.0.2~SNAPSHOT_all.deb"
+        name:
+          - fintech-server
+          - open-banking-gateway
+        state: absent
+
+    - name: Install Fintech-server and Open Banking Gateway Debian packages
+      apt:
+        name: 
+        - fintech-server
+        - open-banking-gateway
         state: present
         update_cache: yes
+
+    - name: Copy FinTech Server systemd service file
+      template:
+        src: fintech-server.service.j2
+        dest: /etc/systemd/system/fintech.service
+        group: obg
+        owner: obg
+        mode: '0644'
+      notify: Reload systemd
+
+    - name: Ensure FinTech Server service is enabled and started
+      systemd:
+        name: fintech.service
+        state: started
+        enabled: true
+      notify: Reload systemd
 
     - name: Copy OBG systemd service file
       template:

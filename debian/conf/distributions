@@ -1,0 +1,5 @@
+Codename: jammy
+Suite: stable
+Components: main
+Architectures: amd64
+SignWith: 7320722489284135C02581426BE9D9AE7FB575BF

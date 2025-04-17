@@ -92,32 +92,7 @@ You'll need this for the configuration. Replace **```your-host```** in the **```
 cd obg-ansible-deployment
 ```
 
-####  2. Run the OBG setup script
-```bash
-sudo ./setup_obg_user.sh
-```
-ℹ️ Once the script completes, you will automatically be switched to the obg user inside the project directory.
-
-This script will:
-- Ensure necessary dependencies are installed
-- Create and configure the obg system user
-- Set up SSH access
-- Configure sudo access
-- Switch to the obg user at the end
-
-#### 3. Set correct file ownership for the **```obg```** user:
-Before continuing, make sure the **obg** user has ownership over the project directory. This is required so the **obg** user can execute the deployment script after the setup. <br>
-Replace the path below with the correct path to your cloned repository:
-```bash
-sudo chown -R obg:obg /home/your-username/path-to/obg-ansible-deployment
-```
-
-You can get the path by running the following;
-```bash
-pwd
-```
-
-#### 4. Run the deployment script
+#### 2. Run the deployment script
 ```bash
 chmod +x test.sh
 ```

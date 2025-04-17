@@ -24,12 +24,6 @@
     state: absent
   become_user: postgres
 
-- name: Ensure PostgreSQL service is enabled and started
-  systemd:
-    name: postgresql
-    enabled: yes
-    state: started
-
 - name: Create Database and User
   postgresql_db:
     name: open_banking

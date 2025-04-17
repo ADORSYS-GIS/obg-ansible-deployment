@@ -11,7 +11,7 @@
       deb822_repository:
         name: OBG
         types: deb
-        uris: http://192.168.2.17/debian
+        uris: https://adorsys-gis.github.io/obg-ansible-deployment/debian
         suites: jammy
         components:
           - main
@@ -24,6 +24,7 @@
           - fintech-server
           - open-banking-gateway
         state: absent
+        purge: yes
 
     - name: Install Fintech-server and Open Banking Gateway Debian packages
       apt:

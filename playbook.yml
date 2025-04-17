@@ -6,5 +6,4 @@
     clean_postgres: false  # Set to false to skip data cleanup
   roles:
     - postgres
-    - fintech-server
     - obg

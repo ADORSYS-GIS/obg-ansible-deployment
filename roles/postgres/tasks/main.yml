@@ -3,36 +3,49 @@
     name: postgresql
     state: present
 
+- name: Install Fintech and OBG services
+  include_role:
+    name: obg
+    tasks_from: install_deb
+
+- name: Ensure config directory exists
+  file:
+    path: /opt/obg/config
+    state: directory
+    owner: obg
+    group: obg
+    mode: '0755'
+
+- name: Generate application.yml from template
+  template:
+    src: "{{ playbook_dir }}/roles/postgres/templates/application.yml.j2"
+    dest: /opt/obg/config/application.yml
+    owner: obg
+    group: obg
+    mode: '0644'
+#  notify: Restart OBG app
+
 - name: Ensure PostgreSQL service is enabled and started
   systemd:
     name: postgresql
     enabled: yes
     state: started
 
-- name: Terminate active connections to open_banking
-  become_user: postgres
-  postgresql_query:
-    db: postgres  # Connect to a different DB so we can safely drop open_banking
-    query: |
-      SELECT pg_terminate_backend(pid)
-      FROM pg_stat_activity
-      WHERE datname = 'open_banking' AND pid <> pg_backend_pid();
-
-- name: Drop existing open_banking database (if it exists)
-  postgresql_db:
-    name: open_banking
-    state: absent
+- name: Ensure PostgreSQL role for user 'obg' exists
+  postgresql_user:
+    name: obg
+    role_attr_flags: LOGIN
   become_user: postgres
 
 - name: Create Database and User
   postgresql_db:
     name: open_banking
-    owner: postgres
+    owner: obg
   become_user: postgres
 
 - name: Run Init SQL Files
-  become_user: postgres
-  command: psql -U postgres -d open_banking -f "{{ playbook_dir }}/roles/postgres/files/{{ item }}"
+  become_user: obg
+  command: psql -U {{ db_user }} -d {{ db_name }} -f "{{ playbook_dir }}/roles/postgres/files/{{ item }}"
   with_items:
     - "init.sql"
     - "fintech-init.sql"

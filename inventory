@@ -1,2 +1,2 @@
-[obg_servers]
-your-host ansible_user=obg ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+[local]
+127.0.0.1 ansible_port=8022 ansible_user=root ansible_ssh_common_args='-o StrictHostKeyChecking=no' ansible_python_interpreter=/usr/bin/python3

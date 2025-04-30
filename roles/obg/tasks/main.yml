@@ -1,3 +1,59 @@
 ---
+- name: Get current Java version
+  shell: java -version 2>&1 | grep 'version' | awk '{print $3}' | tr -d '\"' | cut -d'.' -f1
+  register: java_version
+  ignore_errors: true
+
+- name: Install OpenJDK 21 only if not present or version is less than 21
+  when:
+    - java_version.stdout is not defined
+      or java_version.stdout | trim == ''
+      or java_version.stdout is version('21', '<')
+  block:
+    - name: Set JDK architecture variable
+      set_fact:
+        jdk_arch: "{{ 'aarch64' if ansible_architecture in ['aarch64', 'arm64'] else 'x64' }}"
+
+    - name: Set JDK tarball filename
+      set_fact:
+        jdk_tarball: "jdk-21_linux-{{ jdk_arch | trim }}_bin.tar.gz"
+
+    - name: Download Oracle JDK 21 tarball
+      get_url:
+        url: "https://download.oracle.com/java/21/latest/{{ jdk_tarball }}"
+        dest: "/tmp/{{ jdk_tarball }}"
+        mode: '0644'
+
+    - name: Extract OpenJDK 21 tarball
+      unarchive:
+        src: "/tmp/{{ jdk_tarball }}"
+        dest: /usr/local/
+        remote_src: yes
+        extra_opts: [ --transform, 's,^jdk-21\.[^/]*,jdk-21,' ]
+      become: true
+
+    - name: Set JAVA_HOME and update PATH system-wide
+      copy:
+        dest: /etc/profile.d/jdk21.sh
+        content: |
+          export JAVA_HOME=/usr/local/jdk-21
+          export PATH=$PATH:$JAVA_HOME/bin
+        mode: '0644'
+      become: true
+
+    - name: Source JAVA_HOME for current session
+      shell: source /etc/profile.d/jdk21.sh
+      args:
+        executable: /bin/bash
+
+    - name: Verify Java installation
+      shell: ". /etc/profile.d/jdk21.sh && java --version"
+      register: java_verification
+      changed_when: false
+
+    - name: Show Java version
+      debug:
+        var: java_verification.stdout_lines
+
 - name: Install Dependencies
   include_tasks: install_deb.yml

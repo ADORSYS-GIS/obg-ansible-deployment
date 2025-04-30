@@ -1,7 +1,6 @@
 # Playbook: Build Ansible Script for OBG
 - name: Deploy OBG Environment
-  hosts: obg_servers
-  become: yes
+  hosts: all
   vars:
     clean_postgres: false  # Set to false to skip data cleanup
   roles:

@@ -10,6 +10,8 @@
     state: started
 
 - name: Terminate active connections to open_banking
+  become: true
+  become_method: su
   become_user: postgres
   postgresql_query:
     db: postgres  # Connect to a different DB so we can safely drop open_banking
@@ -22,17 +24,30 @@
   postgresql_db:
     name: open_banking
     state: absent
+  become: true
+  become_method: su
   become_user: postgres
 
 - name: Create Database and User
   postgresql_db:
     name: open_banking
     owner: postgres
+  become: true
+  become_method: su
   become_user: postgres
 
+- name: Copy SQL files to remote host
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "/tmp/{{ item | basename }}"
+  loop:
+    - roles/postgres/files/init.sql
+    - roles/postgres/files/fintech-init.sql
+
 - name: Run Init SQL Files
+  become: true
+  become_method: su
   become_user: postgres
-  command: psql -U postgres -d open_banking -f "{{ playbook_dir }}/roles/postgres/files/{{ item }}"
-  with_items:
-    - "init.sql"
-    - "fintech-init.sql"
+  shell: |
+    psql -U postgres -d open_banking -f /tmp/init.sql
+    psql -U postgres -d open_banking -f /tmp/fintech-init.sql

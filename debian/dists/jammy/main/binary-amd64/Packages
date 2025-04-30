@@ -18,15 +18,15 @@ Package: open-banking-gateway
 Version: 1.0.0
 Architecture: all
 Depends: openjdk-21-jre
-Installed-Size: 113149
+Installed-Size: 116172
 Maintainer: Francis Pouatcha <Francis.Pouatcha@adorsys.com>
 Priority: low
 Section: misc
 Filename: pool/main/o/open-banking-gateway/open-banking-gateway_1.0.0_all.deb
-Size: 103099658
-SHA256: aa41c87d491aa1ae289587f5015a11e67e93b50c5a5086bc50e82fc694bdcd2a
-SHA1: 4515cac64e0ec56de8d91a11747edbb6767ddacc
-MD5sum: 0f04851a491e018b911a2980e7dfc3d2
+Size: 105884312
+SHA256: ba89c6aa46147632b2eae5111aa3918ccbae72414ec6e2447d7d50fe8ebabc55
+SHA1: 4c7a39588fe271cad905039a450be13a9a26d2c7
+MD5sum: 5136f0d63d4e20bb0130272bb70d66f0
 Description: Provides Access to Banking API
 Homepage: https://github.com/adorsys/open-banking-gateway/opba-embedded-starter
 

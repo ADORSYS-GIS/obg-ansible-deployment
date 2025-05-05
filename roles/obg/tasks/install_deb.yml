@@ -1,67 +1,74 @@
 ---
-    - name: Deploy OBG signing key
-      copy:
-        src: obg.gpg
-        dest: /etc/apt/keyrings/obg.gpg
-        owner: root
-        group: root
-        mode: 0644
+- name: Deploy OBG signing key
+  copy:
+    src: obg.gpg
+    dest: /etc/apt/keyrings/obg.gpg
+    owner: root
+    group: root
+    mode: '0644'
 
-    - name: Add Open Banking Gateway APT repo
-      deb822_repository:
-        name: OBG
-        types: deb
-        uris: https://adorsys-gis.github.io/obg-ansible-deployment/debian
-        suites: jammy
-        components:
-          - main
-        architectures: amd64
-        signed_by: /etc/apt/keyrings/obg.gpg
+- name: Add Open Banking Gateway APT repo
+  deb822_repository:
+    name: OBG
+    types: deb
+    uris: https://dw6najmw58pwo.cloudfront.net/debian/
+    suites: jammy
+    components:
+      - main
+    architectures: amd64
+    signed_by: /etc/apt/keyrings/obg.gpg
 
-    - name: Clean up packages
-      apt:
-        name:
-          - fintech-server
-          - open-banking-gateway
-        state: absent
-        purge: yes
+- name: Clean up packages
+  apt:
+    name:
+      - fintech-server
+      - open-banking-gateway
+    state: absent
+    purge: yes
 
-    - name: Install Fintech-server and Open Banking Gateway Debian packages
-      apt:
-        name: 
-        - fintech-server
-        - open-banking-gateway
-        state: present
-        update_cache: yes
+- name: Install Fintech-server and Open Banking Gateway Debian packages
+  apt:
+    name: 
+      - fintech-server
+      - open-banking-gateway
+    state: present
+    update_cache: yes
 
-    - name: Copy FinTech Server systemd service file
-      template:
-        src: fintech-server.service.j2
-        dest: /etc/systemd/system/fintech.service
-        group: obg
-        owner: obg
-        mode: '0644'
-      notify: Reload systemd
+- name: Copy FinTech Server systemd service file
+  template:
+    src: fintech-server.service.j2
+    dest: /etc/systemd/system/fintech.service
+    group: obg
+    owner: obg
+    mode: '0644'
+  notify: Reload systemd
 
-    - name: Ensure FinTech Server service is enabled and started
-      systemd:
-        name: fintech.service
-        state: started
-        enabled: true
-      notify: Reload systemd
+- name: Copy OBG systemd service file
+  template:
+    src: obg.service.j2
+    dest: /etc/systemd/system/obg.service
+    owner: obg
+    group: obg
+    mode: '0644'
+  notify: Reload systemd
 
-    - name: Copy OBG systemd service file
-      template:
-        src: obg.service.j2
-        dest: /etc/systemd/system/obg.service
-        owner: obg
-        group: obg
-        mode: '0644'
-      notify: Reload systemd
-        
-    - name: Ensure OBG service is enabled and started
-      systemd:
-        name: obg.service
-        enabled: true
-        state: started
+- name: Copy OBG application.yml override with database config
+  template:
+    src: application-override.yml.j2
+    dest: /etc/obg/application-override.yml
+    owner: obg
+    group: obg
+    mode: '0644'
 
+- name: Ensure FinTech Server service is enabled and started
+  systemd:
+    name: fintech.service
+    state: started
+    enabled: true
+  notify: Reload systemd
+
+- name: Ensure OBG service is enabled and started
+  systemd:
+    name: obg.service
+    enabled: true
+    state: started

@@ -13,12 +13,11 @@
     path: /opt/obg/config
     state: directory
     owner: obg
-    group: obg
-    mode: '0755'
+    group: obgchore/update-config-docs
 
 - name: Generate application.yml from template
   template:
-    src: "{{ playbook_dir }}/roles/postgres/templates/application.yml.j2"
+    src: "{{ playbook_dir }}/roles/obg/templates/application-override.yml.j2"
     dest: /opt/obg/config/application.yml
     owner: obg
     group: obg

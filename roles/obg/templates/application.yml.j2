@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql:///open_banking?socketFactory=org.newsclub.net.unix.AFUNIXSocketFactory$FactoryArg&socketFactoryArg=/var/run/postgresql/.s.PGSQL.5432
+    url: jdbc:postgresql:///{{ db_name }}?socketFactory=org.newsclub.net.unix.AFUNIXSocketFactory$FactoryArg&socketFactoryArg=/var/run/postgresql/.s.PGSQL.5432
     username: {{ db_user }}
     driver-class-name: org.postgresql.Driver
     use-user-credentials: true

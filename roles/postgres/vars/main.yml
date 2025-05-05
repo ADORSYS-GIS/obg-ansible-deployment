@@ -1,0 +1,13 @@
+db_host: localhost
+db_port: 5432
+db_name: open_banking
+db_user: obg
+db_schema: banking_protocol
+
+admin_name: "Aladdin"
+admin_password: "OpenSesame"
+
+opba_base_url: "https://obg.localhost"
+fintech_base_url: "https://fintech.localhost"
+fintech_ui_url: "https://fintech-ui.localhost"
+piis_ui_url: "https://piis-ui.localhost"

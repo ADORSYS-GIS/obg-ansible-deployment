@@ -8,13 +8,6 @@
     name: obg
     tasks_from: install_deb
 
-- name: Ensure config directory exists
-  file:
-    path: /opt/obg/config
-    state: directory
-    owner: obg
-    group: obgchore/update-config-docs
-
 - name: Generate application.yml from template
   template:
     src: "{{ playbook_dir }}/roles/obg/templates/application.yml.j2"

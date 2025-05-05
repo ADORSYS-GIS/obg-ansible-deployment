@@ -8,23 +8,6 @@
     name: obg
     tasks_from: install_deb
 
-- name: Ensure config directory exists
-  file:
-    path: /opt/obg/config
-    state: directory
-    owner: obg
-    group: obg
-    mode: '0755'
-
-- name: Generate application.yml from template
-  template:
-    src: "{{ playbook_dir }}/roles/postgres/templates/application.yml.j2"
-    dest: /opt/obg/config/application.yml
-    owner: obg
-    group: obg
-    mode: '0644'
-#  notify: Restart OBG app
-
 - name: Ensure PostgreSQL service is enabled and started
   systemd:
     name: postgresql

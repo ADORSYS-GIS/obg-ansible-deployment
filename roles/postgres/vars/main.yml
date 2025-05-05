@@ -1,0 +1,5 @@
+db_host: localhost
+db_port: 5432
+db_name: open_banking
+db_user: obg
+db_schema: banking_protocol

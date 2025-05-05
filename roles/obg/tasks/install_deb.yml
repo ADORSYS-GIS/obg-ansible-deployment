@@ -26,6 +26,14 @@
         state: absent
         purge: yes
 
+    - name: Install Fintech-server and Open Banking Gateway Debian packages
+      apt:
+        name: 
+        - fintech-server
+        - open-banking-gateway
+        state: present
+        update_cache: yes
+
     - name: Ensure config directory exists
       file:
         path: /opt/obg/config
@@ -41,14 +49,6 @@
         owner: obg
         group: obg
         mode: '0644'
-
-    - name: Install Fintech-server and Open Banking Gateway Debian packages
-      apt:
-        name: 
-        - fintech-server
-        - open-banking-gateway
-        state: present
-        update_cache: yes
 
     - name: Copy FinTech Server systemd service file
       template:

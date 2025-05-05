@@ -4,10 +4,8 @@ After=network.target
 
 [Service]
 User=obg
-ExecStart=/usr/bin/java -jar /usr/share/java/open-banking-gateway-1.0.2-SNAPSHOT-exec.jar
-Environment="SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/open_banking?currentSchema=banking_protocol"
-Environment="SPRING_DATASOURCE_USERNAME=postgres"
-Environment="SPRING_DATASOURCE_PASSWORD=docker"
+ExecStart=/usr/bin/java -jar /usr/share/java/open-banking-gateway-1.0.2-SNAPSHOT-exec.jar \
+  --spring.config.location=classpath:/,file:/opt/obg/config/application.yml
 Environment="SPRING_LIQUIBASE_PARAMETERS_ADORSYS-SANDBOX-URL=https://obg-bank-dev-xs2a.cloud.adorsys.de"
 Environment="SPRING_LIQUIBASE_PARAMETERS_ADORSYS-HBCI-SANDBOX-URL=http://localhost:8090/hbci-mock/"
 SuccessExitStatus=143

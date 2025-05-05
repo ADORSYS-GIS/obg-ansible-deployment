@@ -11,7 +11,7 @@
       deb822_repository:
         name: OBG
         types: deb
-        uris: https://adorsys-gis.github.io/obg-ansible-deployment/debian
+        uris: https://dw6najmw58pwo.cloudfront.net/debian/
         suites: jammy
         components:
           - main
@@ -25,6 +25,22 @@
           - open-banking-gateway
         state: absent
         purge: yes
+
+    - name: Ensure config directory exists
+      file:
+        path: /opt/obg/config
+        state: directory
+        owner: obg
+        group: obg
+        mode: '0755'
+
+    - name: Generate application.yml from template
+      template:
+        src: "{{ playbook_dir }}/roles/obg/templates/application.yml.j2"
+        dest: /opt/obg/config/application.yml
+        owner: obg
+        group: obg
+        mode: '0644'
 
     - name: Install Fintech-server and Open Banking Gateway Debian packages
       apt:

@@ -112,7 +112,7 @@ The script will:
 
 ### QWAC Certificate Configuration (PKCS#12)
 
-In `application.override.yml.j2`, the `protocol.xs2a.pkcs12` section configures the QWAC (Qualified Website Authentication Certificate) certificate:
+In `application.yml.j2`, the `protocol.xs2a.pkcs12` section configures the QWAC (Qualified Website Authentication Certificate) certificate:
 
 ```yaml
 protocol:
@@ -133,7 +133,7 @@ protocol:
 
 ### OPBA URL Configuration
 
-In `application.override.yml.j2`, the `opba` section defines various URLs used by the system:
+In `application.yml.j2`, the `opba` section defines various URLs used by the system:
 
 ```yaml
 opba:

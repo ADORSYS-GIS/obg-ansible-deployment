@@ -2,7 +2,5 @@
 - name: Deploy OBG Environment
   hosts: obg_servers
   become: yes
-  vars:
-    clean_postgres: false  # Set to false to skip data cleanup
   roles:
     - postgres

@@ -26,11 +26,27 @@
     state: absent
     purge: yes
 
+- name: Ensure config directory exists
+  file:
+    path: /opt/obg/config
+    state: directory
+    owner: obg
+    group: obg
+    mode: '0755'
+
+- name: Generate application.yml from template
+  template:
+    src: "{{ playbook_dir }}/roles/obg/templates/application.yml.j2"
+    dest: /opt/obg/config/application.yml
+    owner: obg
+    group: obg
+    mode: '0644'
+
 - name: Install Fintech-server and Open Banking Gateway Debian packages
   apt:
     name: 
-      - fintech-server
-      - open-banking-gateway
+    - fintech-server
+    - open-banking-gateway
     state: present
     update_cache: yes
 
@@ -54,7 +70,7 @@
 
 - name: Copy OBG application.yml override with database config
   template:
-    src: application-override.yml.j2
+    src: application.yml.j2
     dest: /etc/obg/application-override.yml
     owner: obg
     group: obg

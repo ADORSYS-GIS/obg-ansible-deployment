@@ -57,6 +57,11 @@ if [ -n "$TARGET_HOST" ]; then
 else
     echo "⚠️ Warning: Could not determine target host from inventory file"
 fi
+# Clean up post-installation marker file if it exists
+if [ -f /etc/obg/.postinst_done ]; then
+    echo "🧹 Removing /etc/obg/.postinst_done"
+    sudo rm -f /etc/obg/.postinst_done
+fi
 
 # Run the Ansible playbook
 echo "🔧 Running Ansible Playbook..."

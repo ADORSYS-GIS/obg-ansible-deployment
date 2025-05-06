@@ -3,11 +3,6 @@
     name: postgresql
     state: present
 
-- name: Install Fintech and OBG services
-  include_role:
-    name: obg
-    tasks_from: install_deb
-
 - name: Ensure PostgreSQL service is enabled and started
   systemd:
     name: postgresql
@@ -27,8 +22,8 @@
   become_user: postgres
 
 - name: Run Init SQL Files
-  become_user: obg
-  command: psql -U {{ db_user }} -d {{ db_name }} -f "{{ playbook_dir }}/roles/postgres/files/{{ item }}"
+  become_user: postgres
+  command: psql -d {{ db_name }} -f "{{ playbook_dir }}/roles/postgres/files/{{ item }}"
   with_items:
     - "init.sql"
     - "fintech-init.sql"

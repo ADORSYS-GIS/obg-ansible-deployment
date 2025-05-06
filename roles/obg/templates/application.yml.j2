@@ -8,3 +8,21 @@ spring:
 liquibase:
   enabled: false
   contexts: dev,mock-banks,xs2a-banks
+
+api:
+  banking:
+    admin-api_security_login: {{ admin_name }}
+    admin-api_security_password: {{ admin_password }}
+
+
+opba:
+  base-url: {{ opba_base_url }}
+  fintech-client-base-url: {{ fintech_base_url }}
+  fintech-ui-url: {{ fintech_ui_url }}
+  piis-ui-url: {{ piis_ui_url }}
+
+protocol:
+  xs2a:
+    pkcs12:
+      keystore: "path to the file"
+      password: password

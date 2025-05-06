@@ -155,7 +155,7 @@ opba:
 
 Note:
 The actual values for the above URLs are provided in the Ansible configuration under
-`roles/postgres/vars/main.yml`.
+`roles/obg/vars/main.yml`.
 
 
 ### Admin API Credentials

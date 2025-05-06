@@ -3,20 +3,6 @@
     name: postgresql
     state: present
 
-- name: Install Fintech and OBG services
-  include_role:
-    name: obg
-    tasks_from: install_deb
-
-- name: Generate application.yml from template
-  template:
-    src: "{{ playbook_dir }}/roles/obg/templates/application.yml.j2"
-    dest: /opt/obg/config/application.yml
-    owner: obg
-    group: obg
-    mode: '0644'
-#  notify: Restart OBG app
-
 - name: Ensure PostgreSQL service is enabled and started
   systemd:
     name: postgresql

@@ -21,9 +21,16 @@
     owner: obg
   become_user: postgres
 
+- name: Copy SQL files to remote host
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "/tmp/{{ item | basename }}"
+  loop:
+    - roles/postgres/files/init.sql
+    - roles/postgres/files/fintech-init.sql
+
 - name: Run Init SQL Files
   become_user: postgres
-  command: psql -d {{ db_name }} -f "{{ playbook_dir }}/roles/postgres/files/{{ item }}"
-  with_items:
-    - "init.sql"
-    - "fintech-init.sql"
+  shell: |
+    psql -U postgres -d open_banking -f /tmp/init.sql
+    psql -U postgres -d open_banking -f /tmp/fintech-init.sql

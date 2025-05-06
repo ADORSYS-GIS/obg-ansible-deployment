@@ -1,6 +1,6 @@
 # Playbook: Build Ansible Script for OBG
 - name: Deploy OBG Environment
-  hosts: obg_servers
+  hosts: all
   become: yes
   roles:
     - postgres

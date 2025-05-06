@@ -1,3 +1,79 @@
 ---
+- name: Get Java information
+  block:
+    - name: Get Java version
+      shell: java -version 2>&1
+      register: java_version_output
+      changed_when: false
+
+    - name: Display Java version
+      debug:
+        var: java_version_output.stderr_lines
+
+    - name: Set Java architecture fact
+      set_fact:
+        java_arch: "{{ 'arm64' if ansible_architecture in ['aarch64', 'arm64'] else 'amd64' }}"
+
+    - name: Get Java home directory
+      shell: dirname $(dirname $(readlink -f $(which java)))
+      register: java_home_result
+      changed_when: false
+
+    - name: Set Java home fact
+      set_fact:
+        java_home: "{{ java_home_result.stdout }}"
+
+    - name: Display Java home
+      debug:
+        var: java_home
+
+    - name: Set JAVA_HOME and update PATH system-wide
+      copy:
+        dest: /etc/profile.d/jre21.sh
+        content: |
+          export JAVA_HOME={{ java_home }}
+          export PATH=$PATH:$JAVA_HOME/bin
+        mode: '0644'
+      become: true
+
+    - name: Source JAVA_HOME for current session
+      shell: source /etc/profile.d/jre21.sh
+      args:
+        executable: /bin/bash
+
+- name: Set up prerequisites for OBG installation
+  block:
+    - name: Create obg user
+      user:
+        name: obg
+        create_home: yes
+        shell: /bin/bash
+        groups: sudo
+        append: yes
+      become: true
+
+    - name: Create required directories
+      file:
+        path: "{{ item }}"
+        state: directory
+        owner: obg
+        group: obg
+        mode: '0755'
+      loop:
+        - /opt/obg
+        - /var/log/obg
+        - /etc/obg
+        - /etc/sudoers.d
+      become: true
+
+    - name: Create empty sudoers file for obg
+      copy:
+        content: "obg ALL=(ALL) NOPASSWD:ALL"
+        dest: /etc/sudoers.d/obg
+        owner: root
+        group: root
+        mode: '0440'
+      become: true
+
 - name: Install Dependencies
   include_tasks: install_deb.yml

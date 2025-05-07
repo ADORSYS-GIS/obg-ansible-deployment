@@ -41,39 +41,5 @@
       args:
         executable: /bin/bash
 
-- name: Set up prerequisites for OBG installation
-  block:
-    - name: Create obg user
-      user:
-        name: obg
-        create_home: yes
-        shell: /bin/bash
-        groups: sudo
-        append: yes
-      become: true
-
-    - name: Create required directories
-      file:
-        path: "{{ item }}"
-        state: directory
-        owner: obg
-        group: obg
-        mode: '0755'
-      loop:
-        - /opt/obg
-        - /var/log/obg
-        - /etc/obg
-        - /etc/sudoers.d
-      become: true
-
-    - name: Create empty sudoers file for obg
-      copy:
-        content: "obg ALL=(ALL) NOPASSWD:ALL"
-        dest: /etc/sudoers.d/obg
-        owner: root
-        group: root
-        mode: '0440'
-      become: true
-
 - name: Install Dependencies
   include_tasks: install_deb.yml

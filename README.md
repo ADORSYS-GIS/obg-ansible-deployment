@@ -4,50 +4,17 @@ This guide will help you set up and run the OBG deployment using Ansible. Follow
 
 ## Table of Contents
 1. [Prerequisites](#prerequisites)
-2. [Installation Steps](#installation-steps)
-3. [Running the Deployment](#running-the-deployment)
-4. [Configuration Reference](#configuration-reference)
+2. [Project Structure](#project-structure)
+3. [Installation Steps](#installation-steps)
+4. [Running the Deployment](#running-the-deployment)
+5. [Configuration Reference](#configuration-reference)
+6. [Troubleshooting](#troubleshooting)
 
 ## Prerequisites
 
 Before you begin, make sure you have the following requirements:
 
-### 1. Java Installation
-You need Java 21 installed on your system. Here's how to install it:
-
-```bash
-# Update your package list
-sudo apt update
-
-# Install Java 21
-sudo apt install openjdk-21-jdk
-```
-
-To verify the installation, run:
-```bash
-java -version
-```
-
-```bash
-/usr/bin/java --version
-```
-
-You should see output showing Java 21 is installed.
-
-### 2. Python Version
-The Ansible scripts require **Python 3.10 or higher** to run reliably.
-
-To check your Python version:
-```bash
-python3 --version
-```
-
-If your version is lower than 3.10, install Python 3.10+ using:
-```bash
-sudo apt install python3.10
-```
-
-### 3. SSH Setup
+### SSH Setup
 The deployment script will automatically install SSH if it's not already installed. However, if you want to verify your SSH setup:
 
 ```bash
@@ -61,6 +28,8 @@ sudo systemctl start ssh
 ```
 
 After starting, check the status again. You should see "**Active: active (running)**".
+
+## Project Structure
 
 ## Installation Steps
 
@@ -89,12 +58,20 @@ You'll need this for the configuration. Replace **`your-host`** in the **`invent
 
 ## Running the Deployment
 
-### 1. Navigate to the project directory:
+### 1. Choose Your Inventory
+
+The project includes two inventory files:
+- `inventories/inventory`: For production deployment
+- `inventories/inventory-local`: For local development
+
+Make sure to use the appropriate inventory file for your deployment.
+
+### 2. Navigate to the project directory:
 ```bash
 cd obg-ansible-deployment
 ```
 
-### 2. Run the deployment script:
+### 3. Run the deployment script:
 ```bash
 chmod +x test.sh
 ./test.sh
@@ -109,6 +86,20 @@ The script will:
 ---
 
 ## Configuration Reference
+
+### Roles Configuration
+
+The project uses two main roles:
+
+1. **OBG Role** (`roles/obg/`):
+   - Handles the deployment of the OBG application
+   - Configures application settings
+   - Sets up the runtime environment
+
+2. **PostgreSQL Role** (`roles/postgres/`):
+   - Manages the PostgreSQL database installation
+   - Configures database settings
+   - Handles database initialization
 
 ### QWAC Certificate Configuration (PKCS#12)
 
@@ -176,7 +167,8 @@ If you encounter any issues:
 2. Verify your SSH service is running
 3. Check that you have the correct permissions
 4. Ensure you're in the correct directory when running the script
-5. For Linux (Ubuntu) users, if you run into this error:
+5. Verify that you're using the correct inventory file for your environment
+6. For Linux (Ubuntu) users, if you run into this error:
    ```
    FAILED! => {"changed": false, "msg": "Failed to update apt cache: unknown reason"}
    ```

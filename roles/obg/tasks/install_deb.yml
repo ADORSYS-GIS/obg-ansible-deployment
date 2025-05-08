@@ -130,5 +130,22 @@
 - name: Ensure OBG service is enabled and started
   systemd:
     name: obg.service
-    enabled: true
     state: started
+    enabled: true
+  notify: Reload systemd
+
+- name: Copy SQL files to remote host
+  become: yes
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "/tmp/{{ item | basename }}"
+  loop:
+    - roles/postgres/files/init.sql
+    - roles/postgres/files/fintech-init.sql
+
+- name: Run Init SQL Files
+  become: yes
+  become_user: obg
+  shell: |
+    psql -d open_banking -f /tmp/init.sql
+    psql -d open_banking -f /tmp/fintech-init.sql

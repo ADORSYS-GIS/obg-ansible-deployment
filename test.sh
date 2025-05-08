@@ -64,12 +64,7 @@ echo "🚀 Starting Ansible Deployment Test..."
 
 
 # Ensure required commands are installed
-#check_command "sshpass"
 check_command "ansible"
-
-# Ensure required packages are installed
-#check_package "openssh-server"
-#check_package "python3-psycopg2"
 
 # Define inventory file location
 INVENTORY_FILE="inventories/inventory-local"

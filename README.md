@@ -62,7 +62,7 @@ chmod +x test.sh
 The `test.sh` script automates the deployment process by performing the following steps:
 1. **Dependency Check**: Verifies that `podman` is installed. If not, it installs it using `apt-get`.
 2. **Container Management**: Removes any existing `ansible-obg-test` container to ensure a clean environment.
-3. **Image Build**: Builds a Docker image using the `Containerfile` provided in the repository.
+3. **Image Build**: Builds a Podman image using the `Containerfile` provided in the repository.
 4. **Container Execution**: Runs the built image in a container named `ansible-obg-test`, mapping necessary ports and configuring it to run with systemd init.
 5. **Ansible Deployment**:
    - Checks for the presence of required Ansible commands and files.

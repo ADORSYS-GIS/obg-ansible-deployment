@@ -84,13 +84,13 @@ In `application.yml.j2`, the `protocol.xs2a.pkcs12` section configures the QWAC 
 protocol:
   xs2a:
     pkcs12:
-      keystore: "roles/obg/files/sample-qwac.keystore"
-      password: "password"
+      keystore: sample-qwac.keystore
+      password: password
 ```
 
 **Details:**
 
-- **keystore**: Path to the `sample-qwac.keystore` file, which is included in the repository at `roles/obg/files/sample-qwac.keystore`, and will hold the certificate.
+- **keystore**: The `sample-qwac.keystore` file is included in the repository at `roles/obg/templates/sample-qwac.keystore`, and will hold the certificate.
 - **password**: The password to access the keystore is set to `"password"`. This should be replaced with the password used when creating the keystore.
 
 ---

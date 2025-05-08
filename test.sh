@@ -1,31 +1,6 @@
 #!/bin/bash
 set -euo pipefail
 
-# remove previously created container
-if docker ps -a -q -f name=ansible-obg-test | grep -q .; then
-  docker stop ansible-obg-test
-fi
-
-# Build our image
-podman build -f Containerfile -t ansible-obg-test
-
-# Run in background (-d) with systemd init
-podman run \
-	--rm \
-	--name ansible-obg-test \
-	-p 127.0.0.1:8022:22 \
-	--systemd=always \
-	-d localhost/ansible-obg-test sh -c "exec /usr/sbin/init --show-status"
-
-# Print to log that container is running
-podman ps
-
-# Clear out fingerprint from any past runs
-ssh-keygen -f "$HOME/.ssh/known_hosts" -R "[127.0.0.1]:8022"
-
-
-echo "🚀 Starting Ansible Deployment Test..."
-
 # Function to check if a command exists
 check_command() {
     if ! command -v "$1" &> /dev/null; then
@@ -55,6 +30,36 @@ check_file() {
         echo "✅ Found required file '$1'"
     fi
 }
+
+# Ensure podman is installed
+check_command "podman"
+
+# remove previously created container
+if podman ps -a --format '{{.Names}}' | grep -q '^ansible-obg-test$'; then
+  echo "🧹 Removing existing container ansible-obg-test"
+  podman rm -f ansible-obg-test
+fi
+
+# Build our image
+podman build -f Containerfile -t ansible-obg-test
+
+# Run in background (-d) with systemd init
+podman run \
+	--rm \
+	--name ansible-obg-test \
+	-p 127.0.0.1:8022:22 \
+	--systemd=always \
+	-d localhost/ansible-obg-test sh -c "exec /usr/sbin/init --show-status"
+
+# Print to log that container is running
+podman ps
+
+# Clear out fingerprint from any past runs
+ssh-keygen -f "$HOME/.ssh/known_hosts" -R "[127.0.0.1]:8022"
+
+
+echo "🚀 Starting Ansible Deployment Test..."
+
 
 # Ensure required commands are installed
 #check_command "sshpass"

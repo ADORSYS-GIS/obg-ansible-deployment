@@ -17,21 +17,10 @@
     role_attr_flags: LOGIN
 
 - name: Create Database and User
+  become: yes
+  become_user: postgres
   postgresql_db:
     name: open_banking
     owner: obg
-  become_user: postgres
 
-- name: Copy SQL files to remote host
-  ansible.builtin.copy:
-    src: "{{ item }}"
-    dest: "/tmp/{{ item | basename }}"
-  loop:
-    - roles/postgres/files/init.sql
-    - roles/postgres/files/fintech-init.sql
 
-- name: Run Init SQL Files
-  become_user: postgres
-  shell: |
-    psql -d open_banking -f /tmp/init.sql
-    psql -d open_banking -f /tmp/fintech-init.sql

@@ -48,6 +48,8 @@ podman run \
 	--rm \
 	--name ansible-obg-test \
 	-p 127.0.0.1:8022:22 \
+	-p 127.0.0.1:8085:8085 \
+	-p 127.0.0.1:8086:8086 \
 	--systemd=always \
 	-d localhost/ansible-obg-test sh -c "exec /usr/sbin/init --show-status"
 

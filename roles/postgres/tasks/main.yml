@@ -1,11 +1,22 @@
-- name: Ensure PostgreSQL is installed
+- name: Add PostgreSQL repository key
+  apt_key:
+    url: https://www.postgresql.org/media/keys/ACCC4CF8.asc
+    state: present
+
+- name: Add PostgreSQL repository
+  apt_repository:
+    repo: deb http://apt.postgresql.org/pub/repos/apt/ {{ ansible_distribution_release }}-pgdg main
+    state: present
+    update_cache: yes
+
+- name: Ensure PostgreSQL 17 is installed
   apt:
-    name: postgresql
+    name: postgresql-17
     state: present
 
 - name: Ensure PostgreSQL service is enabled and started
   systemd:
-    name: postgresql
+    name: postgresql@17-main
     enabled: yes
     state: started
 
@@ -22,5 +33,3 @@
   postgresql_db:
     name: open_banking
     owner: obg
-
-

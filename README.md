@@ -33,7 +33,7 @@ To prepare your environment:
 
 1. Choose the appropriate inventory file based on your deployment scenario:
    - For remote deployments, modify the `inventory` file.
-   - For local deployments, you can use the `inventory-local` file as is, or modify it if needed.
+   - For local deployments, you can use the `inventory-local` file as it is, or modify it if needed.
 
 2. To use the `inventory` file for remote deployments:
    - Get your target machine's IP address:

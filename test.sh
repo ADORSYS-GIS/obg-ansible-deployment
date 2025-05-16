@@ -25,6 +25,7 @@ check_file() {
 check_command "podman"
 check_command "python3"
 check_command "pip"
+check_command "python3-venv"
 
 # Ensure pipx or fallback to pip install of ansible-core
 if command -v pipx &> /dev/null; then

@@ -11,16 +11,6 @@ check_command() {
     fi
 }
 
-# Function to check if a package is installed
-check_package() {
-    if ! dpkg -l "$1" 2>/dev/null | grep -q "^ii"; then
-        echo "❌ $1 is not installed. Installing now..."
-        sudo apt-get update && sudo apt-get install -y "$1"
-    else
-        echo "✅ $1 is already installed"
-    fi
-}
-
 # Function to check if a file exists
 check_file() {
     if [ ! -f "$1" ]; then
@@ -31,8 +21,35 @@ check_file() {
     fi
 }
 
-# Ensure podman is installed
+# Ensure podman and pipx or pip are installed
 check_command "podman"
+check_command "python3"
+check_command "pip"
+
+# Ensure pipx or fallback to pip install of ansible-core
+if command -v pipx &> /dev/null; then
+    echo "✅ pipx is already installed"
+else
+    echo "📦 Installing pipx..."
+    python3 -m pip install --user pipx
+    python3 -m pipx ensurepath
+    export PATH="$HOME/.local/bin:$PATH"
+fi
+
+# Install or upgrade Ansible (via pipx if available)
+if command -v pipx &> /dev/null; then
+    echo "📦 Installing latest ansible-core using pipx..."
+    pipx install ansible --force
+    export PATH="$HOME/.local/bin:$PATH"
+else
+    echo "⚠️ pipx not found, falling back to pip install"
+    python3 -m pip install --user --upgrade ansible
+    export PATH="$HOME/.local/bin:$PATH"
+fi
+
+# Verify Ansible version
+echo "🔍 Ansible version:"
+ansible --version
 
 # remove previously created container
 if podman ps -a --format '{{.Names}}' | grep -q '^ansible-obg-test$'; then
@@ -59,14 +76,9 @@ podman ps
 # Clear out fingerprint from any past runs
 ssh-keygen -f "$HOME/.ssh/known_hosts" -R "[127.0.0.1]:8022"
 
-
 echo "🚀 Starting Ansible Deployment Test..."
 
-
-# Ensure required commands are installed
-check_command "ansible"
-
-# Define inventory file location
+# Define inventory and playbook files
 INVENTORY_FILE="inventories/inventory-local"
 PLAYBOOK_FILE="playbook.yml"
 
@@ -74,7 +86,7 @@ PLAYBOOK_FILE="playbook.yml"
 check_file "$INVENTORY_FILE"
 check_file "$PLAYBOOK_FILE"
 
-# Clear any existing SSH fingerprint
+# Clean SSH fingerprint
 echo "🧹 Cleaning up SSH fingerprints..."
 TARGET_HOST=$(grep -v '^\[.*\]' "$INVENTORY_FILE" | grep -v '^$' | head -n1 | awk '{print $1}')
 if [ -n "$TARGET_HOST" ]; then
@@ -82,6 +94,7 @@ if [ -n "$TARGET_HOST" ]; then
 else
     echo "⚠️ Warning: Could not determine target host from inventory file"
 fi
+
 # Clean up post-installation marker file if it exists
 if [ -f /etc/obg/.postinst_done ]; then
     echo "🧹 Removing /etc/obg/.postinst_done"

@@ -11,17 +11,6 @@ check_command() {
     fi
 }
 
-# Function to check if a package is installed
-check_package() {
-    if ! dpkg -l "$1" 2>/dev/null | grep -q "^ii"; then
-        echo "❌ $1 is not installed. Installing now..."
-        sudo apt-get update && sudo apt-get install -y "$1"
-    else
-        echo "✅ $1 is already installed"
-    fi
-}
-
-# Function to check if a file exists
 check_file() {
     if [ ! -f "$1" ]; then
         echo "❌ Required file '$1' not found!"
@@ -31,8 +20,40 @@ check_file() {
     fi
 }
 
-# Ensure podman is installed
+check_ansible_version() {
+    local min_version="2.14.0"
+    if command -v ansible &> /dev/null; then
+        local current_version=$(ansible --version | head -n1 | awk '{print $3}' | tr -d '[]')
+        if [ "$(printf '%s\n' "$min_version" "$current_version" | sort -V | head -n1)" = "$min_version" ]; then
+            echo "✅ Ansible $current_version is already installed (meets minimum requirement of $min_version)"
+            return 0
+        else
+            echo "❌ Ansible $current_version is installed but does not meet minimum requirement of $min_version"
+        fi
+    else
+        echo "❌ Ansible is not installed"
+    fi
+    return 1
+}
+
+install_ansible_with_apt() {
+    echo "📦 Installing Ansible using APT with PPA..."
+    sudo apt-get update
+    sudo apt-get install -y software-properties-common
+    sudo apt-add-repository -y ppa:ansible/ansible
+    sudo apt-get update
+    sudo apt-get install -y ansible
+}
+
 check_command "podman"
+
+if ! check_ansible_version; then
+    install_ansible_with_apt
+    check_ansible_version || { echo "❌ Failed to install a suitable Ansible version"; exit 1; }
+fi
+
+echo "🔍 Ansible version:"
+ansible --version || "$HOME/.local/bin/ansible" --version
 
 # remove previously created container
 if podman ps -a --format '{{.Names}}' | grep -q '^ansible-obg-test$'; then
@@ -59,14 +80,9 @@ podman ps
 # Clear out fingerprint from any past runs
 ssh-keygen -f "$HOME/.ssh/known_hosts" -R "[127.0.0.1]:8022"
 
-
 echo "🚀 Starting Ansible Deployment Test..."
 
-
-# Ensure required commands are installed
-check_command "ansible"
-
-# Define inventory file location
+# Define inventory and playbook files
 INVENTORY_FILE="inventories/inventory-local"
 PLAYBOOK_FILE="playbook.yml"
 
@@ -74,7 +90,7 @@ PLAYBOOK_FILE="playbook.yml"
 check_file "$INVENTORY_FILE"
 check_file "$PLAYBOOK_FILE"
 
-# Clear any existing SSH fingerprint
+# Clean SSH fingerprint
 echo "🧹 Cleaning up SSH fingerprints..."
 TARGET_HOST=$(grep -v '^\[.*\]' "$INVENTORY_FILE" | grep -v '^$' | head -n1 | awk '{print $1}')
 if [ -n "$TARGET_HOST" ]; then
@@ -82,13 +98,13 @@ if [ -n "$TARGET_HOST" ]; then
 else
     echo "⚠️ Warning: Could not determine target host from inventory file"
 fi
+
 # Clean up post-installation marker file if it exists
 if [ -f /etc/obg/.postinst_done ]; then
     echo "🧹 Removing /etc/obg/.postinst_done"
     sudo rm -f /etc/obg/.postinst_done
 fi
 
-# Run the Ansible playbook
 echo "🔧 Running Ansible Playbook..."
 echo "📝 Using inventory file: $INVENTORY_FILE"
 echo "📝 Using playbook file: $PLAYBOOK_FILE"

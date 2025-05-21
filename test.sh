@@ -11,7 +11,6 @@ check_command() {
     fi
 }
 
-# Function to check if a file exists
 check_file() {
     if [ ! -f "$1" ]; then
         echo "❌ Required file '$1' not found!"
@@ -21,36 +20,40 @@ check_file() {
     fi
 }
 
-# Ensure podman and pipx or pip are installed
+check_ansible_version() {
+    local min_version="2.14.0"
+    if command -v ansible &> /dev/null; then
+        local current_version=$(ansible --version | head -n1 | awk '{print $3}' | tr -d '[]')
+        if [ "$(printf '%s\n' "$min_version" "$current_version" | sort -V | head -n1)" = "$min_version" ]; then
+            echo "✅ Ansible $current_version is already installed (meets minimum requirement of $min_version)"
+            return 0
+        else
+            echo "❌ Ansible $current_version is installed but does not meet minimum requirement of $min_version"
+        fi
+    else
+        echo "❌ Ansible is not installed"
+    fi
+    return 1
+}
+
+install_ansible_with_apt() {
+    echo "📦 Installing Ansible using APT with PPA..."
+    sudo apt-get update
+    sudo apt-get install -y software-properties-common
+    sudo apt-add-repository -y ppa:ansible/ansible
+    sudo apt-get update
+    sudo apt-get install -y ansible
+}
+
 check_command "podman"
-check_command "python3"
-check_command "pip"
-check_command "python3-venv"
 
-# Ensure pipx or fallback to pip install of ansible-core
-if command -v pipx &> /dev/null; then
-    echo "✅ pipx is already installed"
-else
-    echo "📦 Installing pipx..."
-    python3 -m pip install --user pipx
-    python3 -m pipx ensurepath
-    export PATH="$HOME/.local/bin:$PATH"
+if ! check_ansible_version; then
+    install_ansible_with_apt
+    check_ansible_version || { echo "❌ Failed to install a suitable Ansible version"; exit 1; }
 fi
 
-# Install or upgrade Ansible (via pipx if available)
-if command -v pipx &> /dev/null; then
-    echo "📦 Installing latest ansible-core using pipx..."
-    pipx install ansible --force
-    export PATH="$HOME/.local/bin:$PATH"
-else
-    echo "⚠️ pipx not found, falling back to pip install"
-    python3 -m pip install --user --upgrade ansible
-    export PATH="$HOME/.local/bin:$PATH"
-fi
-
-# Verify Ansible version
 echo "🔍 Ansible version:"
-ansible --version
+ansible --version || "$HOME/.local/bin/ansible" --version
 
 # remove previously created container
 if podman ps -a --format '{{.Names}}' | grep -q '^ansible-obg-test$'; then
@@ -102,7 +105,6 @@ if [ -f /etc/obg/.postinst_done ]; then
     sudo rm -f /etc/obg/.postinst_done
 fi
 
-# Run the Ansible playbook
 echo "🔧 Running Ansible Playbook..."
 echo "📝 Using inventory file: $INVENTORY_FILE"
 echo "📝 Using playbook file: $PLAYBOOK_FILE"

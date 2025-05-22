@@ -1,17 +1,17 @@
 Suite: stable
 Codename: jammy
-Date: Wed, 21 May 2025 09:50:00 UTC
+Date: Thu, 22 May 2025 10:21:38 UTC
 Architectures: amd64
 Components: main
 MD5Sum:
- 26874f50f9e0f5e3648c28f01ca3366a 1192 main/binary-amd64/Packages
- 9aaee7f107ba3c8f5e6b427cb748ebb6 574 main/binary-amd64/Packages.gz
+ 2bab20c7ffcad0fd6f186b109d20e63c 1160 main/binary-amd64/Packages
+ 76a3b0dc0f4696f3a0eb387f7ed09c03 560 main/binary-amd64/Packages.gz
  82a1ae90445e5284617f8a8cc3a53fa4 52 main/binary-amd64/Release
 SHA1:
- 1fdfdcfdc4e24289b59f631208025313e3c6ccfb 1192 main/binary-amd64/Packages
- f39c6f51ebc8e20713a6aeb2cf17e5c38093a998 574 main/binary-amd64/Packages.gz
+ c03de69c065f3e4b641f77b949bad5347c5a0720 1160 main/binary-amd64/Packages
+ ef5e1f6692c47a13969b6e2f2afa73734ea461c6 560 main/binary-amd64/Packages.gz
  9b61d92e2c42866227d305db51276f4714da5cd9 52 main/binary-amd64/Release
 SHA256:
- 982ef5fd56b09d1d262da9d3e62296f9a129e4c334036bb8299d0ea4a3f38302 1192 main/binary-amd64/Packages
- 9112a1247b27705a8115109875c4c2a1fc681549f34f20e1beeac2e64e6c4527 574 main/binary-amd64/Packages.gz
+ d58850c4eb2dadb9db798b406c542d0a89a7bc33f9fe33498b787d241deb999e 1160 main/binary-amd64/Packages
+ 8a1958eff00e909cee70e02c03a744aa2f4d0c5ee542f9aa55b6c811ead25341 560 main/binary-amd64/Packages.gz
  5d14a4f1b270a16b7797dfa013f0d0d3325c616762714c6e9a34295a4d9be351 52 main/binary-amd64/Release

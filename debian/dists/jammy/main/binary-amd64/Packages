@@ -1,32 +1,32 @@
 Package: fintech-server
 Version: 1.0.0
 Architecture: all
-Depends: openjdk-21-jre | default-jre (>= 21)
+Depends: java-runtime (>= 21)
 Installed-Size: 84704
 Maintainer: Francis Pouatcha <Francis.Pouatcha@adorsys.com>
 Priority: low
 Section: misc
 Filename: pool/main/f/fintech-server/fintech-server_1.0.0_all.deb
-Size: 77960092
-SHA256: 4a9f4289962dc66ae70535a9b565a2453f7a96d8a3d6d14f41b1265788eff87b
-SHA1: 7a699492d1fbf626a91a3b7eb104f2692148a715
-MD5sum: ba9cbdb675702176832258fe2e220041
+Size: 77960216
+SHA256: dca30e8d4ec27dd5d5327e3b670625ddaca309bc3f04dac8c926b2b211aac1dc
+SHA1: d0815c0f7ece77af2b73afbb236946da62c63d75
+MD5sum: e0b35c4aa7922a8c31e050947bba5734
 Description: Provides Access to Banking APIs.
 Homepage: https://github.com/adorsys/open-banking-gateway/fintech-examples/fintech-server
 
 Package: open-banking-gateway
 Version: 1.0.0
 Architecture: all
-Depends: openjdk-21-jre | default-jre (>= 21)
+Depends: java-runtime (>= 21)
 Installed-Size: 116172
 Maintainer: Francis Pouatcha <Francis.Pouatcha@adorsys.com>
 Priority: low
 Section: misc
 Filename: pool/main/o/open-banking-gateway/open-banking-gateway_1.0.0_all.deb
-Size: 105884212
-SHA256: de1d39965c6efbcf39d5e4cbb439dbe51806595807058fc6aa7c9d101d21b7c4
-SHA1: a3d288ff53a862463677c91fb1ccb11366b74ca7
-MD5sum: 60b7d3533d0412de09c5d40451b91a1c
+Size: 105884280
+SHA256: 91c0bcaeb042fe689dba41a786078005622d7dc97ff173fa63a112056ad24246
+SHA1: 5077e1c5134fe193d4f85b61c2936db128b6ef59
+MD5sum: 1dfd4ff33b89cec9b57239c483013775
 Description: Provides Access to Banking API
 Homepage: https://github.com/adorsys/open-banking-gateway/opba-embedded-starter
 

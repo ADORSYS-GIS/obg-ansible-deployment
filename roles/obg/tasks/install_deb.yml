@@ -26,58 +26,6 @@
     state: absent
     purge: yes
 
-- name: Create symlink for Java 21 OpenJDK compatibility
-  file:
-    src: "/usr/lib/jvm/temurin-21-jre-{{ java_arch }}"
-    dest: /usr/lib/jvm/java-21-openjdk-amd64
-    state: link
-    force: true
-  become: true
-
-- name: Install dependencies for equivs
-  apt:
-    name: equivs
-    state: present
-  become: true
-
-- name: Create control file for fake openjdk-21-jre package
-  copy:
-    dest: /tmp/openjdk-21-jre-control
-    content: |
-      Section: misc
-      Priority: optional
-      Standards-Version: 3.9.2
-      Package: openjdk-21-jre
-      Version: 21.0.7
-      Maintainer: Ansible <ansible@localhost>
-      Architecture: all
-      Depends: temurin-21-jre
-      Description: Dummy package for openjdk-21-jre
-       This is a dummy package that provides openjdk-21-jre
-       for dependency resolution.
-    mode: '0644'
-  become: true
-
-- name: Build dummy openjdk-21-jre package
-  shell: cd /tmp && equivs-build openjdk-21-jre-control
-  args:
-    creates: /tmp/openjdk-21-jre_21.0.7_all.deb
-  become: true
-
-- name: Install dummy openjdk-21-jre package
-  apt:
-    deb: /tmp/openjdk-21-jre_21.0.7_all.deb
-  become: true
-
-- name: Ensure sudoers.d directory exists
-  file:
-    path: /etc/sudoers.d
-    state: directory
-    mode: '0755'
-    owner: root
-    group: root
-  become: true
-
 - name: Install Fintech-server and Open Banking Gateway Debian packages
   apt:
     name: 

@@ -7,10 +7,10 @@ Maintainer: Francis Pouatcha <Francis.Pouatcha@adorsys.com>
 Priority: low
 Section: misc
 Filename: pool/main/f/fintech-server/fintech-server_1.0.0_all.deb
-Size: 80743312
-SHA256: 22c34f9e670eea9f1ac677ef8e9b02d3d1707f772e533802a7f8610febde81b1
-SHA1: b636d292522683b2cf59915f4362713f3c30c77d
-MD5sum: 14eb29c9d03d3832f55b5414df4a4ff4
+Size: 80743302
+SHA256: cf802e33d5b1b6fbb8d920f373f34a124361a29022b386ea19de731dcf527fe4
+SHA1: b5637f9d94003055721e9b9d87fca4bc9860ad90
+MD5sum: f04c6ad8eebd4235f294ec0eb17da34b
 Description: Provides Access to Banking APIs.
 Homepage: https://github.com/adorsys/open-banking-gateway/fintech-examples/fintech-server
 
@@ -23,10 +23,10 @@ Maintainer: Francis Pouatcha <Francis.Pouatcha@adorsys.com>
 Priority: low
 Section: misc
 Filename: pool/main/o/open-banking-gateway/open-banking-gateway_1.0.0_all.deb
-Size: 105884080
-SHA256: 4b06365aa005861a30f7c198ca8e2c2d27e80106b28b60b210f9b7fd733d8bea
-SHA1: d410d4f6362cf5341c5d6a52c33cf16575ff92b5
-MD5sum: b58f31daa7e1c93c405b016bdb107c5c
+Size: 105884410
+SHA256: 0e0aeca485eb6bfc0c8afb33ba89593011d65cebbebfc227449015c72d03d334
+SHA1: 094b1391c69d2d3317a237e32514d57b9d198a7f
+MD5sum: 455ee158dc008e9e03419737dabbcde3
 Description: Provides Access to Banking API
 Homepage: https://github.com/adorsys/open-banking-gateway/opba-embedded-starter
 

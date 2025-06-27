@@ -1,0 +1,54 @@
+---
+- name: Deploy signing key for cms-standalone-service
+  copy:
+    src: obg.gpg
+    dest: /etc/apt/keyrings/obg.gpg
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Add APT repo for cms-standalone-service
+  deb822_repository:
+    name: OBG
+    types: deb
+    uris: https://dw6najmw58pwo.cloudfront.net/debian/
+    suites: jammy
+    components:
+      - main
+    architectures: amd64
+    signed_by: /etc/apt/keyrings/obg.gpg
+
+- name: Clean up old cms-standalone-service package
+  apt:
+    name: cms-standalone-service
+    state: absent
+    purge: yes
+
+- name: Install cms-standalone-service Debian package
+  apt:
+    name: cms-standalone-service
+    state: present
+    update_cache: yes
+
+- name: Ensure config directory exists
+  file:
+    path: /opt/cms-standalone-service/config
+    state: directory
+    owner: obg
+    group: obg
+    mode: '0755'
+
+- name: Copy systemd service file for cms-standalone-service
+  template:
+    src: cms-standalone-service.service.j2
+    dest: /etc/systemd/system/cms-standalone-service.service
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Reload systemd
+
+- name: Ensure cms-standalone-service service is enabled and started
+  systemd:
+    name: cms-standalone-service
+    state: started
+    enabled: true

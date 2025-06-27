@@ -1,0 +1,11 @@
+[Unit]
+Description=ASPSP Profile Server
+After=network.target
+
+[Service]
+User=obg
+ExecStart=/usr/bin/java -jar /opt/aspsp-profile-server/aspsp-profile-server.jar
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

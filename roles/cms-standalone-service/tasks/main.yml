@@ -1,42 +1,129 @@
+#---
+#- name: Deploy signing key for cms-standalone-service
+#  copy:
+#    src: obg.gpg
+#    dest: /etc/apt/keyrings/obg.gpg
+#    owner: root
+#    group: root
+#    mode: '0644'
+#
+#- name: Add APT repo for cms-standalone-service
+#  deb822_repository:
+#    name: OBG
+#    types: deb
+#    uris: https://dw6najmw58pwo.cloudfront.net/debian/
+#    suites: jammy
+#    components:
+#      - main
+#    architectures: amd64
+#    signed_by: /etc/apt/keyrings/obg.gpg
+#
+#- name: Clean up old cms-standalone-service package
+#  apt:
+#    name: cms-standalone-service
+#    state: absent
+#    purge: yes
+#
+#- name: Install cms-standalone-service Debian package
+#  apt:
+#    name: cms-standalone-service
+#    state: present
+#    update_cache: yes
+#
+#- name: Ensure config directory exists
+#  file:
+#    path: /opt/cms-standalone-service/config
+#    state: directory
+#    owner: obg
+#    group: obg
+#    mode: '0755'
+#
+#- name: Copy systemd service file for cms-standalone-service
+#  template:
+#    src: cms-standalone-service.service.j2
+#    dest: /etc/systemd/system/cms-standalone-service.service
+#    owner: root
+#    group: root
+#    mode: '0644'
+#  notify: Reload systemd
+#
+#- name: Ensure cms-standalone-service service is enabled and started
+#  systemd:
+#    name: cms-standalone-service
+#    state: started
+#    enabled: true
+
+
+# Optional: add repo if you ever want to install from apt repo instead.
+# But with local .deb this is not needed.
+
 ---
-- name: Deploy signing key for cms-standalone-service
-  copy:
-    src: obg.gpg
-    dest: /etc/apt/keyrings/obg.gpg
-    owner: root
-    group: root
-    mode: '0644'
-
-- name: Add APT repo for cms-standalone-service
-  deb822_repository:
-    name: OBG
-    types: deb
-    uris: https://dw6najmw58pwo.cloudfront.net/debian/
-    suites: jammy
-    components:
-      - main
-    architectures: amd64
-    signed_by: /etc/apt/keyrings/obg.gpg
-
 - name: Clean up old cms-standalone-service package
   apt:
     name: cms-standalone-service
     state: absent
     purge: yes
 
-- name: Install cms-standalone-service Debian package
-  apt:
-    name: cms-standalone-service
-    state: present
-    update_cache: yes
+- name: Ensure .deb file present on target
+  copy:
+    src: cms-standalone-service_17.3_all.deb
+    dest: /tmp/cms-standalone-service_17.3_all.deb
+    mode: '0644'
 
-- name: Ensure config directory exists
-  file:
-    path: /opt/cms-standalone-service/config
-    state: directory
-    owner: obg
-    group: obg
-    mode: '0755'
+- name: Install cms-standalone-service .deb package
+  become: true
+  apt:
+    deb: /tmp/cms-standalone-service_17.3_all.deb
+
+- name: Ensure Podman is installed
+  ansible.builtin.package:
+    name: podman
+    state: present
+
+- name: Pull CMS Postgres image with Podman
+  containers.podman.podman_image:
+    name: "{{ cms_postgres_image }}"
+    state: present
+
+- name: Create CMS Postgres volume for data
+  containers.podman.podman_volume:
+    name: consent-management-data
+
+- name: Run CMS Postgres container
+  containers.podman.podman_container:
+    name: consent-management-postgres
+    image: "{{ cms_postgres_image }}"
+    restart_policy: on-failure
+    published_ports:
+      - "{{ cms_postgres_host_port }}:5432"
+    volumes:
+      - consent-management-data:/var/lib/postgresql/data:Z
+      - "{{ playbook_dir }}/consent-management/cms-db-schema/util/pg-create-schema.sh:/docker-entrypoint-initdb.d/zzz-create-schema.sh:Z"
+    env:
+      POSTGRES_USER: "{{ cms_db_user }}"
+      POSTGRES_PASSWORD: "{{ cms_db_password }}"
+      POSTGRES_DB: "{{ cms_db_name }}"
+    network: bridge
+
+- name: Wait for CMS Postgres to be ready on port {{ cms_postgres_host_port }}
+  ansible.builtin.wait_for:
+    host: "127.0.0.1"
+    port: "{{ cms_postgres_host_port }}"
+    delay: 5
+    timeout: 60
+
+- name: Copy liquibase.properties (templated)
+  template:
+    src: liquibase.properties.j2
+    dest: "{{ playbook_dir }}/consent-management/cms-db-schema/liquibase.properties"
+    mode: '0644'
+
+- name: Run Liquibase migrations for CMS schema using standalone POM
+  shell: |
+    cd {{ playbook_dir }}/consent-management/cms-db-schema
+    mvn -f pom-liquibase.xml liquibase:update
+  environment:
+    MAVEN_OPTS: "-Dmaven.repo.local={{ ansible_env.HOME }}/.m2/repository"
 
 - name: Copy systemd service file for cms-standalone-service
   template:

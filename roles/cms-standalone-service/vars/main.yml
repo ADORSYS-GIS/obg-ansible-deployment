@@ -1,2 +1,9 @@
----
-service_name: cms-standalone-service
+cms_postgres_image: "docker.io/library/postgres:latest"
+cms_postgres_host_port: 5433
+cms_postgres_admin_password: postgres
+
+cms_db_name: consent
+cms_db_user: cms
+cms_db_password: cms
+cms_db_schema: consent
+cms_db_host: localhost

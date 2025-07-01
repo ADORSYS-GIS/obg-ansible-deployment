@@ -1,0 +1,65 @@
+<!--
+  ~ Copyright 2018-2024 adorsys GmbH & Co KG
+  ~
+  ~ This program is free software: you can redistribute it and/or modify it
+  ~ under the terms of the GNU Affero General Public License as published
+  ~ by the Free Software Foundation, either version 3 of the License, or (at
+  ~ your option) any later version. This program is distributed in the hope that
+  ~ it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+  ~ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  ~ See the GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with this program. If not, see https://www.gnu.org/licenses/.
+  ~
+  ~ This project is also available under a separate commercial license. You can
+  ~ contact us at sales@adorsys.com.
+  -->
+
+<databaseChangeLog logicalFilePath="db.changelog-1.0.xml" xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="2020-04-13-12" author="iku@adorsys.com.ua">
+        <comment>Create table aspsp_account_access</comment>
+        <createTable tableName="aspsp_account_access">
+            <column name="consent_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="resource_id" type="VARCHAR(100)"/>
+            <column name="aspsp_account_id" type="VARCHAR(100)"/>
+            <column name="currency" type="VARCHAR(3)">
+            </column>
+            <column name="type_access" type="VARCHAR(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="account_identifier" type="VARCHAR(34)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="account_reference_type" type="VARCHAR(30)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet id="2020-04-13-13" author="iku@adorsys.com.ua">
+        <comment>Copy existing data from ais_aspsp_account_access table to aspsp_account_access</comment>
+        <sql>
+            INSERT INTO aspsp_account_access (consent_id, resource_id, aspsp_account_id, currency, type_access, account_identifier, account_reference_type)
+            SELECT consent_id, resource_id, aspsp_account_id, currency, type_access, account_identifier, account_reference_type
+            FROM ais_aspsp_account_access
+        </sql>
+
+    </changeSet>
+
+    <changeSet id="2020-04-13-14" author="iku@adorsys.com.ua">
+        <comment>Add foreign keys to account_access table</comment>
+
+        <addForeignKeyConstraint baseTableName="aspsp_account_access" baseColumnNames="consent_id"
+                                 constraintName="fk_asp_account_access_consent"
+                                 referencedTableName="consent"
+                                 referencedColumnNames="consent_id"/>
+    </changeSet>
+
+</databaseChangeLog>

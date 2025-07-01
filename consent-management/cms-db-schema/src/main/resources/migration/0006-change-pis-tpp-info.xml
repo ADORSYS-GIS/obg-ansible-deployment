@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+  ~ Copyright 2018-2024 adorsys GmbH & Co KG
+  ~
+  ~ This program is free software: you can redistribute it and/or modify it
+  ~ under the terms of the GNU Affero General Public License as published
+  ~ by the Free Software Foundation, either version 3 of the License, or (at
+  ~ your option) any later version. This program is distributed in the hope that
+  ~ it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+  ~ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  ~ See the GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with this program. If not, see https://www.gnu.org/licenses/.
+  ~
+  ~ This project is also available under a separate commercial license. You can
+  ~ contact us at sales@adorsys.com.
+  -->
+
+<databaseChangeLog logicalFilePath="db.changelog-1.0.xml" xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet author="ssh@adorsys.com.ua" id="2018-10-06-1">
+        <validCheckSum>8:5b335594e84109801f04ae5a56024aae</validCheckSum>
+        <comment>Rename pis_tpp_info to tpp_info, change its structure and add tpp_info_role table</comment>
+
+        <dropSequence sequenceName="pis_tpp_info_id_seq"/>
+        <createSequence sequenceName="tpp_info_id_seq"/>
+
+        <renameTable newTableName="tpp_info"
+                     oldTableName="pis_tpp_info"/>
+
+        <renameColumn columnDataType="VARCHAR(50)"
+                      newColumnName="authorisation_number"
+                      oldColumnName="registration_number"
+                      tableName="tpp_info"/>
+
+        <dropColumn columnName="tpp_role"
+                    tableName="tpp_info"/>
+        <dropColumn columnName="national_competent_auth"
+                    tableName="tpp_info"/>
+
+        <dropNotNullConstraint columnName="redirect_uri"
+                               tableName="tpp_info" columnDataType="VARCHAR(255)"/>
+        <dropNotNullConstraint columnName="nok_redirect_uri"
+                               tableName="tpp_info" columnDataType="VARCHAR(255)"/>
+
+        <addColumn tableName="tpp_info">
+            <column defaultValue="12345987" name="authority_id" type="CLOB">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="authority name" name="authority_name" type="CLOB">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="Germany" name="country" type="CLOB">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="Organisation" name="organisation" type="CLOB">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="Organisation unit" name="organisation_unit" type="CLOB">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="Nuremberg" name="city" type="CLOB">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="Bayern" name="state" type="CLOB">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <createTable tableName="tpp_info_role">
+            <column name="tpp_info_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tpp_role" type="VARCHAR(10)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

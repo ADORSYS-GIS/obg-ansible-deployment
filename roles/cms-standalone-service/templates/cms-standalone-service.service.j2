@@ -1,11 +1,15 @@
 [Unit]
-Description=ASPSP Profile Server
-After=network.target
+Description=CMS Standalone Service
+After=network.target docker.service
+Requires=docker.service
 
 [Service]
 User=obg
-ExecStart=/usr/bin/java -jar /opt/cms-standalone-service/cms-standalone-service.jar
-Restart=on-failure
+Environment=SERVER_KEY=mySecretKey
+ExecStart=/usr/bin/java -jar /usr/share/java/consent-management.jar
+SuccessExitStatus=143
+Restart=always
+RestartSec=10
 
 [Install]
 WantedBy=multi-user.target

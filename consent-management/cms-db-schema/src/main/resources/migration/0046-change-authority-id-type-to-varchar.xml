@@ -1,0 +1,66 @@
+<!--
+  ~ Copyright 2018-2024 adorsys GmbH & Co KG
+  ~
+  ~ This program is free software: you can redistribute it and/or modify it
+  ~ under the terms of the GNU Affero General Public License as published
+  ~ by the Free Software Foundation, either version 3 of the License, or (at
+  ~ your option) any later version. This program is distributed in the hope that
+  ~ it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+  ~ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  ~ See the GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with this program. If not, see https://www.gnu.org/licenses/.
+  ~
+  ~ This project is also available under a separate commercial license. You can
+  ~ contact us at sales@adorsys.com.
+  -->
+
+<databaseChangeLog logicalFilePath="db.changelog-1.0.xml" xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet author="ssh@adorsys.com.ua" id="2019-02-13-1">
+        <preConditions onFail="MARK_RAN" onSqlOutput="TEST">
+            <not>
+                <dbms type="oracle"/>
+            </not>
+        </preConditions>
+
+        <comment>Change type of authority_id column in tpp_info table to VARCHAR(except for Oracle)</comment>
+
+        <modifyDataType tableName="tpp_info" columnName="authority_id" newDataType="VARCHAR(255)"/>
+
+        <!--
+            [WARNING] modifyDataType will lose primary key/autoincrement/not null settings for mysql.
+            Use <sql> and re-specify all configuration if this is the case
+        -->
+        <sql dbms="mariadb">ALTER TABLE tpp_info MODIFY authority_id VARCHAR(255) NOT NULL</sql>
+        <addNotNullConstraint tableName="tpp_info" columnName="authority_id" columnDataType="VARCHAR(255)"/>
+    </changeSet>
+
+    <changeSet author="ssh@adorsys.com.ua" id="2019-02-13-2" dbms="oracle">
+        <comment>
+            Create temporary column temp_authority_id with VARCHAR type and value from authority_id for Oracle
+        </comment>
+
+        <addColumn tableName="tpp_info">
+            <column name="temp_authority_id" type="VARCHAR(255)"/>
+        </addColumn>
+
+        <sql>
+            UPDATE tpp_info SET temp_authority_id = dbms_lob.substr(authority_id, 255, 1)
+        </sql>
+    </changeSet>
+
+    <changeSet author="ssh@adorsys.com.ua" id="2019-02-13-3" dbms="oracle">
+        <comment>Replace authority_id column with temp_authority_id for Oracle</comment>
+
+        <dropColumn tableName="tpp_info" columnName="authority_id"/>
+
+        <renameColumn tableName="tpp_info" oldColumnName="temp_authority_id" newColumnName="authority_id"/>
+
+        <addNotNullConstraint tableName="tpp_info" columnName="authority_id"/>
+    </changeSet>
+
+</databaseChangeLog>

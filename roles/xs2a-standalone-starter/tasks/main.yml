@@ -1,53 +1,98 @@
----
-- name: Deploy signing key for xs2a-standalone-starter
-  copy:
-    src: obg.gpg
-    dest: /etc/apt/keyrings/obg.gpg
-    owner: root
-    group: root
-    mode: '0644'
+#---
+#- name: Deploy signing key for xs2a-standalone-starter
+#  copy:
+#    src: obg.gpg
+#    dest: /etc/apt/keyrings/obg.gpg
+#    owner: root
+#    group: root
+#    mode: '0644'
+#
+#- name: Add APT repo for xs2a-standalone-starter
+#  deb822_repository:
+#    name: OBG
+#    types: deb
+#    uris: https://dw6najmw58pwo.cloudfront.net/debian/
+#    suites: jammy
+#    components:
+#      - main
+#    architectures: amd64
+#    signed_by: /etc/apt/keyrings/obg.gpg
+#
+#- name: Clean up old xs2a-standalone-starter package
+#  apt:
+#    name: xs2a-standalone-starter
+#    state: absent
+#    purge: yes
+#
+#- name: Install xs2a-standalone-starter Debian package
+#  apt:
+#    name: xs2a-standalone-starter
+#    state: present
+#    update_cache: yes
+#
+#- name: Ensure config directory exists
+#  file:
+#    path: /opt/xs2a-standalone-starter/config
+#    state: directory
+#    owner: obg
+#    group: obg
+#    mode: '0755'
+#
+#- name: Copy systemd service file for xs2a-standalone-starter
+#  template:
+#    src: cms-standalone-service.service.j2
+#    dest: /etc/systemd/system/xs2a-standalone-starter.service
+#    owner: root
+#    group: root
+#    mode: '0644'
+#  notify: Reload systemd
+#
+#- name: Ensure xs2a-standalone-starter service is enabled and started
+#  systemd:
+#    name: xs2a-standalone-starter
+#    state: started
+#    enabled: true
 
-- name: Add APT repo for xs2a-standalone-starter
-  deb822_repository:
-    name: OBG
-    types: deb
-    uris: https://dw6najmw58pwo.cloudfront.net/debian/
-    suites: jammy
-    components:
-      - main
-    architectures: amd64
-    signed_by: /etc/apt/keyrings/obg.gpg
 
-- name: Clean up old xs2a-standalone-starter package
+
+# Optional: add repo if you ever want to install from apt repo instead.
+# But with local .deb this is not needed.
+
+- name: Clean up old xs2a-standalone-starter Profile package
   apt:
     name: xs2a-standalone-starter
     state: absent
     purge: yes
 
-- name: Install xs2a-standalone-starter Debian package
-  apt:
-    name: xs2a-standalone-starter
-    state: present
-    update_cache: yes
+- name: Ensure .deb file present on target
+  copy:
+    src: xs2a-standalone-starter_17.3_all.deb
+    dest: /tmp/xs2a-standalone-starter_17.3_all.deb
+    mode: '0644'
 
-- name: Ensure config directory exists
+- name: Install xs2a-standalone-starter Profile .deb package
+  become: true
+  apt:
+    deb: /tmp/xs2a-standalone-starter_17.3_all.deb
+
+- name: Ensure log directory exists for xs2a-standalone-starter
   file:
-    path: /opt/xs2a-standalone-starter/config
+    path: /logs
     state: directory
     owner: obg
     group: obg
     mode: '0755'
 
-- name: Copy systemd service file for xs2a-standalone-starter
+- name: Copy systemd service file for xs2a-standalone-starter Profile
   template:
-    src: cms-standalone-service.service.j2
+    src: xs2a-standalone-starter.service.j2
     dest: /etc/systemd/system/xs2a-standalone-starter.service
     owner: root
     group: root
     mode: '0644'
   notify: Reload systemd
 
-- name: Ensure xs2a-standalone-starter service is enabled and started
+- name: Ensure xs2a-standalone-starter Profile service is enabled and started
   systemd:
     name: xs2a-standalone-starter
     state: started

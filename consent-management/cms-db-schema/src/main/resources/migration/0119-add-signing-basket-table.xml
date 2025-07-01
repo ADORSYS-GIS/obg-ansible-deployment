@@ -1,0 +1,160 @@
+<!--
+  ~ Copyright 2018-2024 adorsys GmbH & Co KG
+  ~
+  ~ This program is free software: you can redistribute it and/or modify it
+  ~ under the terms of the GNU Affero General Public License as published
+  ~ by the Free Software Foundation, either version 3 of the License, or (at
+  ~ your option) any later version. This program is distributed in the hope that
+  ~ it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+  ~ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  ~ See the GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with this program. If not, see https://www.gnu.org/licenses/.
+  ~
+  ~ This project is also available under a separate commercial license. You can
+  ~ contact us at sales@adorsys.com.
+  -->
+
+<databaseChangeLog logicalFilePath="db.changelog-1.0.xml" xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet author="ske@adorsys.de" id="2020-09-11-1">
+        <validCheckSum>8:21360d172969b06e2256219f9842bab6</validCheckSum>
+        <comment>Create sequence for singing_basket_id</comment>
+        <createSequence sequenceName="signing_basket_id_seq"/>
+    </changeSet>
+
+    <changeSet author="ske@adorsys.de" id="2020-09-11-2">
+        <validCheckSum>8:6414a8f568a3c76828c95ff0c9b885a3</validCheckSum>
+        <comment>Create sequence for sb_tpp_information</comment>
+        <createSequence sequenceName="sb_tpp_information_id_seq"/>
+    </changeSet>
+
+    <changeSet author="ske@adorsys.de" id="2020-09-11-3">
+        <comment>Create table signing_basket</comment>
+        <createTable tableName="signing_basket">
+            <column name="signing_basket_id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="external_id" type="VARCHAR(40)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="transaction_status" type="VARCHAR(6)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="internal_request_id" type="VARCHAR(40)"/>
+            <column name="authorisation_template_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="multilevel_sca_required" type="BOOLEAN"/>
+            <column name="instance_id" type="VARCHAR(40)"/>
+            <column name="sb_tpp_information_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creation_timestamp" type="DATETIME" valueDate="${now}">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="ske@adorsys.de" id="2020-09-11-4">
+        <comment>Create table signing_basket_consents</comment>
+        <createTable tableName="signing_basket_consents">
+            <column name="signing_basket_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="consent_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="signing_basket_consents" baseColumnNames="signing_basket_id"
+                                 constraintName="fk_sb_consents_signing_basket"
+                                 referencedTableName="signing_basket" referencedColumnNames="signing_basket_id"/>
+        <addForeignKeyConstraint baseTableName="signing_basket_consents" baseColumnNames="consent_id"
+                                 constraintName="fk_sb_consents_conset" referencedTableName="consent"
+                                 referencedColumnNames="consent_id"/>
+    </changeSet>
+
+    <changeSet author="ske@adorsys.de" id="2020-09-11-5">
+        <comment>Create table signing_basket_payments</comment>
+        <createTable tableName="signing_basket_payments">
+            <column name="signing_basket_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="payment_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="signing_basket_payments" baseColumnNames="signing_basket_id"
+                                 constraintName="fk_sb_payments_signing_basket"
+                                 referencedTableName="signing_basket" referencedColumnNames="signing_basket_id"/>
+        <addForeignKeyConstraint baseTableName="signing_basket_payments" baseColumnNames="payment_id"
+                                 constraintName="fk_sb_payments_payment"
+                                 referencedTableName="pis_common_payment" referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet author="ske@adorsys.de" id="2020-09-11-6">
+        <comment>Create table signing_basket_psu_data</comment>
+        <createTable tableName="signing_basket_psu_data">
+            <column name="signing_basket_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="psu_data_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="signing_basket_psu_data" baseColumnNames="signing_basket_id"
+                                 constraintName="fk_sb_psu_data_signing_basket"
+                                 referencedTableName="signing_basket" referencedColumnNames="signing_basket_id"/>
+        <addForeignKeyConstraint baseTableName="signing_basket_psu_data" baseColumnNames="psu_data_id"
+                                 constraintName="fk_sb_psu_data_psu_data"
+                                 referencedTableName="psu_data" referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet author="ske@adorsys.de" id="2020-09-11-7">
+        <comment>Create table signing_basket_tpp_information</comment>
+
+        <createTable tableName="signing_basket_tpp_information">
+            <column name="sb_tpp_information_id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="tpp_ntfc_uri" type="VARCHAR(100)"/>
+            <column name="tpp_redirect_preferred" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tpp_info_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="signing_basket"
+                                 baseColumnNames="sb_tpp_information_id"
+                                 constraintName="fk_sb_tpp_information"
+                                 referencedTableName="signing_basket_tpp_information"
+                                 referencedColumnNames="sb_tpp_information_id"/>
+        <addForeignKeyConstraint baseTableName="signing_basket_tpp_information"
+                                 baseColumnNames="tpp_info_id"
+                                 constraintName="fk_sb_tpp_info" deferrable="false"
+                                 initiallyDeferred="false"
+                                 referencedTableName="tpp_info"
+                                 referencedColumnNames="tpp_info_id"/>
+    </changeSet>
+
+    <changeSet author="ske@adorsys.de" id="2020-09-11-8">
+        <comment>Create table signing_basket_tpp_ntfc</comment>
+
+        <createTable tableName="signing_basket_tpp_ntfc">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="notification_mode" type="VARCHAR(10)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

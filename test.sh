@@ -68,14 +68,21 @@ podman build -f Containerfile -t ansible-obg-test
 podman run \
 	--rm \
 	--name ansible-obg-test \
+	--privileged \
 	-p 127.0.0.1:8022:22 \
 	-p 127.0.0.1:8085:8085 \
 	-p 127.0.0.1:8086:8086 \
+	-p 127.0.0.1:48080:48080 \
+	-p 127.0.0.1:38080:38080 \
+	-v $PWD/consent-management:$PWD/consent-management:Z \
 	--systemd=always \
 	-d localhost/ansible-obg-test sh -c "exec /usr/sbin/init --show-status"
 
 # Print to log that container is running
 podman ps
+
+echo "📦 Installing Ansible community.general collection inside the container..."
+podman exec ansible-obg-test ansible-galaxy collection install community.general
 
 # Clear out fingerprint from any past runs
 ssh-keygen -f "$HOME/.ssh/known_hosts" -R "[127.0.0.1]:8022"
@@ -104,6 +111,10 @@ if [ -f /etc/obg/.postinst_done ]; then
     echo "🧹 Removing /etc/obg/.postinst_done"
     sudo rm -f /etc/obg/.postinst_done
 fi
+#
+#echo "📦 Ensuring community.general collection on host too..."
+#ansible-galaxy collection install community.general
+#
 
 echo "🔧 Running Ansible Playbook..."
 echo "📝 Using inventory file: $INVENTORY_FILE"

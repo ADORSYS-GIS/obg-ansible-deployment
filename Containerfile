@@ -35,3 +35,7 @@ RUN sed -i'' -e's/^#PermitRootLogin prohibit-password$/PermitRootLogin yes/' /et
         && sed -i'' -e's/^#PasswordAuthentication yes$/PasswordAuthentication yes/' /etc/ssh/sshd_config \
         && sed -i'' -e's/^#PermitEmptyPasswords no$/PermitEmptyPasswords yes/' /etc/ssh/sshd_config \
         && sed -i'' -e's/^UsePAM yes/UsePAM no/' /etc/ssh/sshd_config
+
+# ✅ NEW: Install Maven inside this image too
+RUN apt-get update -yqq && \
+    apt-get install -yqq maven

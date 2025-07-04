@@ -53,10 +53,6 @@
 #    state: started
 #    enabled: true
 
-
-# Optional: add repo if you ever want to install from apt repo instead.
-# But with local .deb this is not needed.
-
 ---
 - name: Clean up old cms-standalone-service package
   apt:
@@ -68,7 +64,7 @@
   copy:
     src: cms-standalone-service_17.3_all.deb
     dest: /tmp/cms-standalone-service_17.3_all.deb
-    mode: '0644'
+    mode: "0644"
 
 - name: Install cms-standalone-service .deb package
   become: true
@@ -116,14 +112,7 @@
   template:
     src: liquibase.properties.j2
     dest: "{{ playbook_dir }}/consent-management/cms-db-schema/liquibase.properties"
-    mode: '0644'
-
-- name: Run Liquibase migrations for CMS schema using standalone POM
-  shell: |
-    cd {{ playbook_dir }}/consent-management/cms-db-schema
-    mvn -f pom-liquibase.xml liquibase:update
-  environment:
-    MAVEN_OPTS: "-Dmaven.repo.local={{ ansible_env.HOME }}/.m2/repository"
+    mode: "0644"
 
 - name: Copy systemd service file for cms-standalone-service
   template:
@@ -131,8 +120,19 @@
     dest: /etc/systemd/system/cms-standalone-service.service
     owner: root
     group: root
-    mode: '0644'
+    mode: "0644"
   notify: Reload systemd
+
+- name: Run Liquibase migrations for CMS schema using standalone POM
+  shell: |
+    mvn -f /home/valantine/ADORSYS-GIS/Taler/obg-ansible-deployment/consent-management/cms-db-schema/pom-liquibase.xml liquibase:update
+  environment:
+    MAVEN_OPTS: "-Dmaven.repo.local={{ ansible_env.HOME }}/.m2/repository"
+
+# - name: Debug Liquibase output
+#   debug:
+#     var: liquibase_result
+#   when: liquibase_result.rc != 0
 
 - name: Ensure cms-standalone-service service is enabled and started
   systemd:

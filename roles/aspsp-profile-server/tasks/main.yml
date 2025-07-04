@@ -55,9 +55,6 @@
 
 
 ---
-# Optional: add repo if you ever want to install from apt repo instead.
-# But with local .deb this is not needed.
-
 - name: Clean up old ASPSP Profile package
   apt:
     name: aspsp-profile-server

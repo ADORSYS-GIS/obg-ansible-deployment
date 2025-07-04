@@ -1,11 +1,11 @@
 [Unit]
 Description=CMS Standalone Service
-After=network.target docker.service
-Requires=docker.service
+After=network.target
 
 [Service]
 User=obg
 Environment=SERVER_KEY=mySecretKey
+Environment=SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5433/consent
 ExecStart=/usr/bin/java -jar /usr/share/java/consent-management.jar
 SuccessExitStatus=143
 Restart=always

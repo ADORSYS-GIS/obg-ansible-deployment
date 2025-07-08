@@ -1,76 +1,34 @@
-#---
-#- name: Deploy signing key for ASPSP Profile
-#  copy:
-#    src: obg.gpg
-#    dest: /etc/apt/keyrings/obg.gpg
-#    owner: root
-#    group: root
-#    mode: '0644'
-#
-#- name: Add APT repo for ASPSP Profile
-#  deb822_repository:
-#    name: OBG
-#    types: deb
-#    uris: https://dw6najmw58pwo.cloudfront.net/debian/
-#    suites: jammy
-#    components:
-#      - main
-#    architectures: amd64
-#    signed_by: /etc/apt/keyrings/obg.gpg
-#
-#- name: Clean up old ASPSP Profile package
-#  apt:
-#    name: aspsp-profile-server
-#    state: absent
-#    purge: yes
-#
-#- name: Install ASPSP Profile Debian package
-#  apt:
-#    name: aspsp-profile-server
-#    state: present
-#    update_cache: yes
-#
-#- name: Ensure config directory exists
-#  file:
-#    path: /opt/aspsp-profile-server/config
-#    state: directory
-#    owner: obg
-#    group: obg
-#    mode: '0755'
-#
-#- name: Copy systemd service file for ASPSP Profile
-#  template:
-#    src: cms-standalone-service.service.j2
-#    dest: /etc/systemd/system/aspsp-profile-server.service
-#    owner: root
-#    group: root
-#    mode: '0644'
-#  notify: Reload systemd
-#
-#- name: Ensure ASPSP Profile service is enabled and started
-#  systemd:
-#    name: aspsp-profile-server
-#    state: started
-#    enabled: true
-
-
 ---
+- name: Deploy signing key for ASPSP Profile
+  copy:
+    src: xs2a.gpg
+    dest: /etc/apt/keyrings/xs2a.gpg
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Add APT repo for ASPSP Profile
+  deb822_repository:
+    name: xs2a
+    types: deb
+    uris: https://xs2a-deb.obgdeb.com/debian/
+    suites: jammy
+    components:
+      - main
+    architectures: amd64
+    signed_by: /etc/apt/keyrings/xs2a.gpg
+
 - name: Clean up old ASPSP Profile package
   apt:
     name: aspsp-profile-server
     state: absent
     purge: yes
 
-- name: Ensure .deb file present on target
-  copy:
-    src: aspsp-profile-server_17.3_all.deb
-    dest: /tmp/aspsp-profile-server_17.3_all.deb
-    mode: '0644'
-
-- name: Install ASPSP Profile .deb package
-  become: true
+- name: Install ASPSP Profile Debian package
   apt:
-    deb: /tmp/aspsp-profile-server_17.3_all.deb
+    name: aspsp-profile-server
+    state: present
+    update_cache: yes
 
 - name: Copy systemd service file for ASPSP Profile
   template:

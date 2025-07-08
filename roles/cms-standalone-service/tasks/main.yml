@@ -1,75 +1,34 @@
-#---
-#- name: Deploy signing key for cms-standalone-service
-#  copy:
-#    src: obg.gpg
-#    dest: /etc/apt/keyrings/obg.gpg
-#    owner: root
-#    group: root
-#    mode: '0644'
-#
-#- name: Add APT repo for cms-standalone-service
-#  deb822_repository:
-#    name: OBG
-#    types: deb
-#    uris: https://dw6najmw58pwo.cloudfront.net/debian/
-#    suites: jammy
-#    components:
-#      - main
-#    architectures: amd64
-#    signed_by: /etc/apt/keyrings/obg.gpg
-#
-#- name: Clean up old cms-standalone-service package
-#  apt:
-#    name: cms-standalone-service
-#    state: absent
-#    purge: yes
-#
-#- name: Install cms-standalone-service Debian package
-#  apt:
-#    name: cms-standalone-service
-#    state: present
-#    update_cache: yes
-#
-#- name: Ensure config directory exists
-#  file:
-#    path: /opt/cms-standalone-service/config
-#    state: directory
-#    owner: obg
-#    group: obg
-#    mode: '0755'
-#
-#- name: Copy systemd service file for cms-standalone-service
-#  template:
-#    src: cms-standalone-service.service.j2
-#    dest: /etc/systemd/system/cms-standalone-service.service
-#    owner: root
-#    group: root
-#    mode: '0644'
-#  notify: Reload systemd
-#
-#- name: Ensure cms-standalone-service service is enabled and started
-#  systemd:
-#    name: cms-standalone-service
-#    state: started
-#    enabled: true
-
 ---
+- name: Deploy signing key for cms-standalone-service
+  copy:
+    src: xs2a.gpg
+    dest: /etc/apt/keyrings/xs2a.gpg
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Add APT repo for cms-standalone-service
+  deb822_repository:
+    name: xs2a
+    types: deb
+    uris: https://xs2a-deb.obgdeb.com/debian/
+    suites: jammy
+    components:
+      - main
+    architectures: amd64
+    signed_by: /etc/apt/keyrings/xs2a.gpg
+
 - name: Clean up old cms-standalone-service package
   apt:
     name: cms-standalone-service
     state: absent
     purge: yes
 
-- name: Ensure .deb file present on target
-  copy:
-    src: cms-standalone-service_17.3_all.deb
-    dest: /tmp/cms-standalone-service_17.3_all.deb
-    mode: "0644"
-
-- name: Install cms-standalone-service .deb package
-  become: true
+- name: Install cms-standalone-service Debian package
   apt:
-    deb: /tmp/cms-standalone-service_17.3_all.deb
+    name: cms-standalone-service
+    state: present
+    update_cache: yes
 
 - name: Ensure Podman is installed
   ansible.builtin.package:
@@ -80,6 +39,11 @@
   containers.podman.podman_image:
     name: "{{ cms_postgres_image }}"
     state: present
+
+- name: Remove existing Postgres volume to force fresh initialization
+  containers.podman.podman_volume:
+    name: consent-management-data
+    state: absent
 
 - name: Create CMS Postgres volume for data
   containers.podman.podman_volume:
@@ -120,7 +84,7 @@
     dest: /etc/systemd/system/cms-standalone-service.service
     owner: root
     group: root
-    mode: "0644"
+    mode: '0644'
   notify: Reload systemd
 
 - name: Run Liquibase migrations for CMS schema using standalone POM
@@ -128,11 +92,6 @@
     mvn -f /home/valantine/ADORSYS-GIS/Taler/obg-ansible-deployment/consent-management/cms-db-schema/pom-liquibase.xml liquibase:update
   environment:
     MAVEN_OPTS: "-Dmaven.repo.local={{ ansible_env.HOME }}/.m2/repository"
-
-# - name: Debug Liquibase output
-#   debug:
-#     var: liquibase_result
-#   when: liquibase_result.rc != 0
 
 - name: Ensure cms-standalone-service service is enabled and started
   systemd:

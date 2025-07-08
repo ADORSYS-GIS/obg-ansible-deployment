@@ -5,7 +5,7 @@ After=network.target
 [Service]
 User=obg
 Environment=SERVER_KEY=mySecretKey
-Environment=SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5433/consent
+Environment=SPRING_DATASOURCE_URL=jdbc:postgresql://{{ cms_db_host }}:{{ cms_postgres_host_port }}/{{ cms_db_name }}
 ExecStart=/usr/bin/java -jar /usr/share/java/consent-management.jar
 SuccessExitStatus=143
 Restart=always

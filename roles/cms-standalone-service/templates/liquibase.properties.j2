@@ -1,5 +1,4 @@
-url=jdbc:postgresql://{{ cms_db_host }}:{{ cms_postgres_host_port }}/{{ cms_db_schema }}
+url=jdbc:postgresql://{{ cms_db_host }}:{{ cms_postgres_host_port }}/{{ cms_db_name }}
 username={{ cms_db_user }}
 password={{ cms_db_password }}
 changeLogFile=src/main/resources/master.xml
-defaultSchemaName=consent

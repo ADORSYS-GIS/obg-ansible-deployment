@@ -58,7 +58,6 @@
       - "{{ cms_postgres_host_port }}:5432"
     volumes:
       - consent-management-data:/var/lib/postgresql/data:Z
-      - "{{ playbook_dir }}/consent-management/cms-db-schema/util/pg-create-schema.sh:/docker-entrypoint-initdb.d/zzz-create-schema.sh:Z"
     env:
       POSTGRES_USER: "{{ cms_db_user }}"
       POSTGRES_PASSWORD: "{{ cms_db_password }}"
@@ -77,6 +76,24 @@
     src: liquibase.properties.j2
     dest: "{{ playbook_dir }}/consent-management/cms-db-schema/liquibase.properties"
     mode: "0644"
+
+- name: Create 'consent' schema
+  community.postgresql.postgresql_query:
+    db: "{{ cms_db_name }}"
+    login_host: "127.0.0.1"
+    port: "{{ cms_postgres_host_port }}"
+    login_user: "{{ cms_db_user }}"
+    login_password: "{{ cms_db_password }}"
+    query: "CREATE SCHEMA IF NOT EXISTS consent AUTHORIZATION cms;"
+
+- name: Create 'public' schema
+  community.postgresql.postgresql_query:
+    db: "{{ cms_db_name }}"
+    login_host: "127.0.0.1"
+    port: "{{ cms_postgres_host_port }}"
+    login_user: "{{ cms_db_user }}"
+    login_password: "{{ cms_db_password }}"
+    query: "CREATE SCHEMA IF NOT EXISTS public AUTHORIZATION cms;"
 
 - name: Copy systemd service file for cms-standalone-service
   template:

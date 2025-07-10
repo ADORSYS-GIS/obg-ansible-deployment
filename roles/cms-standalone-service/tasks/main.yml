@@ -106,7 +106,10 @@
 
 - name: Run Liquibase migrations for CMS schema using standalone POM
   shell: |
-    mvn -f /home/valantine/ADORSYS-GIS/Taler/obg-ansible-deployment/consent-management/cms-db-schema/pom-liquibase.xml liquibase:update
+    mvn -f <path/to/your/local/repo>/consent-management/cms-db-schema/pom-liquibase.xml \
+      -DpropertyFile=liquibase.properties liquibase:update
+  args:
+    chdir: "{{ playbook_dir }}/consent-management/cms-db-schema"
   environment:
     MAVEN_OPTS: "-Dmaven.repo.local={{ ansible_env.HOME }}/.m2/repository"
 

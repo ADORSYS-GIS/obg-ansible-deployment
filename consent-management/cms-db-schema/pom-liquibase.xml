@@ -26,11 +26,7 @@
                 <version>${liquibase-core.version}</version>
                 <configuration>
                     <propertyFile>${propertyFile}</propertyFile>
-                    <url>jdbc:postgresql://localhost:5433/consent</url>
-                    <username>cms</username>
-                    <password>cms</password>
-                    <changeLogFile>src/main/resources/master.xml</changeLogFile>
-                    <defaultSchemaName>consent</defaultSchemaName>
+                    <searchPath>${basedir}</searchPath>
                 </configuration>
                 <dependencies>
                     <dependency>

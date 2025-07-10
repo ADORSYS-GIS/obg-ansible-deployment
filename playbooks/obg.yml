@@ -5,6 +5,3 @@
   roles:
     - postgres
     - obg
-    - aspsp-profile-server
-    - cms-standalone-service
-    - xs2a-standalone-starter

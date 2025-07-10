@@ -1,19 +1,13 @@
 # OBG Ansible Deployment Guide
 
-This guide will help you set up and run the OBG deployment using Ansible. Follow these steps carefully to ensure a successful installation and execution.
+This guide will help you set up and run the OBG and xs2a deployments using Ansible. Follow these steps carefully to ensure a successful installation and execution.
 
 ## Table of Contents
 
-# OBG
 1. [Installation Steps](#installation-steps)
 2. [Running the Deployment](#running-the-deployment)
 3. [Configuration Reference](#configuration-reference)
 
-# XS2A
-1. [Configurations](#1-configurations)
-
-
-# - OBG
 ## Installation Steps
 
 ### 1. Clone the Repository
@@ -30,6 +24,7 @@ git clone https://github.com/ADORSYS-GIS/obg-ansible-deployment.git
 
 ### Prepare Your Environment
 
+#### A - Inventories
 The repository includes two inventory files in the `inventories` directory:
 
 1. **`inventory`**: This is the default inventory file used for remote deployments. It contains placeholders for host-specific variables that need to be customized for your environment.
@@ -51,6 +46,40 @@ To prepare your environment:
 3. To use `inventory-local` for local deployments, no changes are required unless you have specific local configurations.
 
 By selecting and configuring the appropriate inventory file, you ensure that the deployment is tailored to your specific environment.
+
+#### B - Playbooks
+
+The repository includes various playbook files in the `playbooks` directory:
+
+1. **`obg.yml`**: This playbook file is specifically designed for the deployment of the OBG components.
+2. **`xs2a.yml`**: This playbook file is specifically designed for the deployment of the XS2A components.
+3. **`deploy-all.yml`**: This is the playbook file specifically designed for the deployment of all the components in one go.
+
+To prepare your environment:
+
+1. Choose the appropriate playbook file based on your deployment scenario:
+   - For OBG deployments, use the `obg.yml` file.
+   - For XS2A deployments, use the `xs2a.yml` file.
+   - For deploying all components, use the `deply-all.yml` file.
+
+2. To use any of the above files for your desired deployment:
+   - Navigate to the project directory, and modify the `test.sh` script - Line 94, replacing `<your-playbook>` with your desired playbook:
+     ```bash
+     PLAYBOOK_FILE="playbooks/<your-playbook>"
+     ```
+By selecting and configuring the appropriate playbook file, you ensure that the deployment is tailored to your specific environment.
+
+#### C - CMS-Standalone-Service Path Configuration
+
+Navigate to the root of project, and run the following command to get the current working directory path:
+```bash
+pwd
+```
+
+Then, edit the `roles/cms-standalone-service/tasks/main.yml` file (Line 115) and replace `<path/to/your/local/repo>` with the output of the above command. For example:
+```bash
+/home/john/obg-ansible-deployment/
+```
 
 ## Running the Deployment
 
@@ -140,10 +169,5 @@ These credentials can be used to log in to the Admin API dashboard for managing 
 ⚠️ Important: For production environments, always replace default credentials with secure, environment-specific values.
 
 ---
-
-
-# - XS2A
-
-### 1. Configurations
 
 For additional help, please contact the development team.

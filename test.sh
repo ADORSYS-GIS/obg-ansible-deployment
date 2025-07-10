@@ -91,7 +91,7 @@ echo "🚀 Starting Ansible Deployment Test..."
 
 # Define inventory and playbook files
 INVENTORY_FILE="inventories/inventory-local"
-PLAYBOOK_FILE="playbook.yml"
+PLAYBOOK_FILE="playbooks/<your-playbook>"
 
 # Check for required files
 check_file "$INVENTORY_FILE"
@@ -111,10 +111,6 @@ if [ -f /etc/obg/.postinst_done ]; then
     echo "🧹 Removing /etc/obg/.postinst_done"
     sudo rm -f /etc/obg/.postinst_done
 fi
-#
-#echo "📦 Ensuring community.general collection on host too..."
-#ansible-galaxy collection install community.general
-#
 
 echo "🔧 Running Ansible Playbook..."
 echo "📝 Using inventory file: $INVENTORY_FILE"

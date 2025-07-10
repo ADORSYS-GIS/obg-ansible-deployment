@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+  ~ Copyright 2018-2024 adorsys GmbH & Co KG
+  ~
+  ~ This program is free software: you can redistribute it and/or modify it
+  ~ under the terms of the GNU Affero General Public License as published
+  ~ by the Free Software Foundation, either version 3 of the License, or (at
+  ~ your option) any later version. This program is distributed in the hope that
+  ~ it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+  ~ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  ~ See the GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with this program. If not, see https://www.gnu.org/licenses/.
+  ~
+  ~ This project is also available under a separate commercial license. You can
+  ~ contact us at sales@adorsys.com.
+  -->
+
+<databaseChangeLog logicalFilePath="db.changelog-1.0.xml" xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet author="ssh@adorsys.com.ua" id="2019-01-25-1">
+        <comment>Remove unnecessary not null constraints from columns in tpp_info</comment>
+
+        <dropNotNullConstraint tableName="tpp_info" columnName="tpp_name" columnDataType="VARCHAR(100)"/>
+        <dropNotNullConstraint tableName="tpp_info" columnName="authority_name" columnDataType="CLOB"/>
+        <dropNotNullConstraint tableName="tpp_info" columnName="country" columnDataType="CLOB"/>
+        <dropNotNullConstraint tableName="tpp_info" columnName="organisation" columnDataType="CLOB"/>
+        <dropNotNullConstraint tableName="tpp_info" columnName="organisation_unit" columnDataType="CLOB"/>
+        <dropNotNullConstraint tableName="tpp_info" columnName="city" columnDataType="CLOB"/>
+        <dropNotNullConstraint tableName="tpp_info" columnName="state" columnDataType="CLOB"/>
+    </changeSet>
+
+    <changeSet id="2019-01-25-2" author="ssh@adorsys.com.ua" dbms="mariadb">
+        <comment>Set value of authorisation_number in tpp_info to "default authorisation number" for existing records in
+            MariaDB
+        </comment>
+
+        <update tableName="tpp_info">
+            <column name="authorisation_number" type="VARCHAR(50)" value="default authorisation number"/>
+            <where>authorisation_number IS NULL</where>
+        </update>
+    </changeSet>
+
+    <changeSet id="2019-01-25-3" author="ssh@adorsys.com.ua" dbms="mariadb">
+        <comment>Add not null constraint to authorisation_number column in tpp_info in MariaDB</comment>
+
+        <addNotNullConstraint tableName="tpp_info" columnName="authorisation_number" columnDataType="VARCHAR(50)"/>
+    </changeSet>
+
+</databaseChangeLog>

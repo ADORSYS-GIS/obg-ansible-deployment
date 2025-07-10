@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+  ~ Copyright 2018-2024 adorsys GmbH & Co KG
+  ~
+  ~ This program is free software: you can redistribute it and/or modify it
+  ~ under the terms of the GNU Affero General Public License as published
+  ~ by the Free Software Foundation, either version 3 of the License, or (at
+  ~ your option) any later version. This program is distributed in the hope that
+  ~ it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+  ~ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  ~ See the GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with this program. If not, see https://www.gnu.org/licenses/.
+  ~
+  ~ This project is also available under a separate commercial license. You can
+  ~ contact us at sales@adorsys.com.
+  -->
+
+<databaseChangeLog logicalFilePath="db.changelog-1.0.xml" xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet author="msh@adorsys.com.ua" id="2018-10-30-1">
+        <validCheckSum>8:95381ae3d8f0a408abaea7125193a46b</validCheckSum>
+        <comment>Create sequence for psu_data_id</comment>
+        <createSequence sequenceName="psu_data_id_seq"/>
+    </changeSet>
+
+    <changeSet author="msh@adorsys.com.ua" id="2018-10-30-2">
+        <comment>Create table psu_data</comment>
+
+        <createTable tableName="psu_data">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="psu_id" type="VARCHAR(50)" />
+            <column name="psu_id_type" type="VARCHAR(50)" />
+            <column name="psu_corporate_id" type="VARCHAR(50)" />
+            <column name="psu_corporate_id_type" type="VARCHAR(50)" />
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

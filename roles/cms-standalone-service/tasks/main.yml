@@ -1,0 +1,120 @@
+---
+- name: Deploy signing key for cms-standalone-service
+  copy:
+    src: xs2a.gpg
+    dest: /etc/apt/keyrings/xs2a.gpg
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Add APT repo for cms-standalone-service
+  deb822_repository:
+    name: xs2a
+    types: deb
+    uris: https://xs2a-deb.obgdeb.com/debian/
+    suites: jammy
+    components:
+      - main
+    architectures: amd64
+    signed_by: /etc/apt/keyrings/xs2a.gpg
+
+- name: Clean up old cms-standalone-service package
+  apt:
+    name: cms-standalone-service
+    state: absent
+    purge: yes
+
+- name: Install cms-standalone-service Debian package
+  apt:
+    name: cms-standalone-service
+    state: present
+    update_cache: yes
+
+- name: Ensure Podman is installed
+  ansible.builtin.package:
+    name: podman
+    state: present
+
+- name: Pull CMS Postgres image with Podman
+  containers.podman.podman_image:
+    name: "{{ cms_postgres_image }}"
+    state: present
+
+- name: Remove existing Postgres volume to force fresh initialization
+  containers.podman.podman_volume:
+    name: consent-management-data
+    state: absent
+
+- name: Create CMS Postgres volume for data
+  containers.podman.podman_volume:
+    name: consent-management-data
+
+- name: Run CMS Postgres container
+  containers.podman.podman_container:
+    name: consent-management-postgres
+    image: "{{ cms_postgres_image }}"
+    restart_policy: on-failure
+    published_ports:
+      - "{{ cms_postgres_host_port }}:5432"
+    volumes:
+      - consent-management-data:/var/lib/postgresql/data:Z
+    env:
+      POSTGRES_USER: "{{ cms_db_user }}"
+      POSTGRES_PASSWORD: "{{ cms_db_password }}"
+      POSTGRES_DB: "{{ cms_db_name }}"
+    network: bridge
+
+- name: Wait for CMS Postgres to be ready on port {{ cms_postgres_host_port }}
+  ansible.builtin.wait_for:
+    host: "127.0.0.1"
+    port: "{{ cms_postgres_host_port }}"
+    delay: 5
+    timeout: 60
+
+- name: Copy liquibase.properties (templated)
+  template:
+    src: liquibase.properties.j2
+    dest: "{{ playbook_dir }}/consent-management/cms-db-schema/liquibase.properties"
+    mode: "0644"
+
+- name: Create 'consent' schema
+  community.postgresql.postgresql_query:
+    db: "{{ cms_db_name }}"
+    login_host: "127.0.0.1"
+    port: "{{ cms_postgres_host_port }}"
+    login_user: "{{ cms_db_user }}"
+    login_password: "{{ cms_db_password }}"
+    query: "CREATE SCHEMA IF NOT EXISTS consent AUTHORIZATION cms;"
+
+- name: Create 'public' schema
+  community.postgresql.postgresql_query:
+    db: "{{ cms_db_name }}"
+    login_host: "127.0.0.1"
+    port: "{{ cms_postgres_host_port }}"
+    login_user: "{{ cms_db_user }}"
+    login_password: "{{ cms_db_password }}"
+    query: "CREATE SCHEMA IF NOT EXISTS public AUTHORIZATION cms;"
+
+- name: Copy systemd service file for cms-standalone-service
+  template:
+    src: cms-standalone-service.service.j2
+    dest: /etc/systemd/system/cms-standalone-service.service
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Reload systemd
+
+- name: Run Liquibase migrations for CMS schema using standalone POM
+  shell: |
+    mvn -f <path/to/your/local/repo>/consent-management/cms-db-schema/pom-liquibase.xml \
+      -DpropertyFile=liquibase.properties liquibase:update
+  args:
+    chdir: "{{ playbook_dir }}/consent-management/cms-db-schema"
+  environment:
+    MAVEN_OPTS: "-Dmaven.repo.local={{ ansible_env.HOME }}/.m2/repository"
+
+- name: Ensure cms-standalone-service service is enabled and started
+  systemd:
+    name: cms-standalone-service
+    state: started
+    enabled: true

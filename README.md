@@ -3,11 +3,17 @@
 This guide will help you set up and run the OBG deployment using Ansible. Follow these steps carefully to ensure a successful installation and execution.
 
 ## Table of Contents
+
+# OBG
 1. [Installation Steps](#installation-steps)
 2. [Running the Deployment](#running-the-deployment)
 3. [Configuration Reference](#configuration-reference)
 
+# XS2A
+1. [Configurations](#1-configurations)
 
+
+# - OBG
 ## Installation Steps
 
 ### 1. Clone the Repository
@@ -135,5 +141,9 @@ These credentials can be used to log in to the Admin API dashboard for managing 
 
 ---
 
+
+# - XS2A
+
+### 1. Configurations
 
 For additional help, please contact the development team.

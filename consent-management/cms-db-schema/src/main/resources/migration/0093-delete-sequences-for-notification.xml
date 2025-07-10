@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+  ~ Copyright 2018-2024 adorsys GmbH & Co KG
+  ~
+  ~ This program is free software: you can redistribute it and/or modify it
+  ~ under the terms of the GNU Affero General Public License as published
+  ~ by the Free Software Foundation, either version 3 of the License, or (at
+  ~ your option) any later version. This program is distributed in the hope that
+  ~ it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+  ~ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  ~ See the GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with this program. If not, see https://www.gnu.org/licenses/.
+  ~
+  ~ This project is also available under a separate commercial license. You can
+  ~ contact us at sales@adorsys.com.
+  -->
+
+<databaseChangeLog logicalFilePath="db.changelog-1.0.xml" xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet author="hhe@adorsys.de" id="2019-12-21-1">
+
+        <comment>Drop sequence for ais_consent_tpp_ntfc table for mariadb</comment>
+
+        <sql dbms="mariadb">DROP SEQUENCE IF EXISTS ais_consent_notification_id_seq</sql>
+    </changeSet>
+
+    <changeSet author="hhe@adorsys.de" id="2019-12-21-2">
+
+        <comment>Drop sequence for payment_tpp_ntfc table for mariadb</comment>
+
+        <sql dbms="mariadb">DROP SEQUENCE IF EXISTS pis_payment_notification_id_seq</sql>
+    </changeSet>
+
+    <changeSet author="hhe@adorsys.de" id="2019-12-21-3">
+
+        <preConditions onFail="MARK_RAN" onSqlOutput="TEST">
+            <sequenceExists sequenceName="ais_consent_notification_id_seq" />
+        </preConditions>
+
+        <comment>Drop sequence for ais_consent_tpp_ntfc table for oracle or postgresql</comment>
+
+        <dropSequence sequenceName="ais_consent_notification_id_seq"/>
+    </changeSet>
+
+    <changeSet author="hhe@adorsys.de" id="2019-12-21-4">
+
+        <preConditions onFail="MARK_RAN" onSqlOutput="TEST">
+            <sequenceExists sequenceName="pis_payment_notification_id_seq" />
+        </preConditions>
+
+        <comment>Drop sequence for payment_tpp_ntfc table for oracle or postgresql</comment>
+
+        <dropSequence sequenceName="pis_payment_notification_id_seq"/>
+    </changeSet>
+
+</databaseChangeLog>

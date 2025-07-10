@@ -1,0 +1,163 @@
+<!--
+  ~ Copyright 2018-2024 adorsys GmbH & Co KG
+  ~
+  ~ This program is free software: you can redistribute it and/or modify it
+  ~ under the terms of the GNU Affero General Public License as published
+  ~ by the Free Software Foundation, either version 3 of the License, or (at
+  ~ your option) any later version. This program is distributed in the hope that
+  ~ it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+  ~ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  ~ See the GNU Affero General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with this program. If not, see https://www.gnu.org/licenses/.
+  ~
+  ~ This project is also available under a separate commercial license. You can
+  ~ contact us at sales@adorsys.com.
+  -->
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <include relativeToChangelogFile="true" file="migration/0000-init-schema.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0001-remove-column-pis-consent-authorization.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0002-drop-not-null-creditor-agent-pis-payment-data.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0003-remove-length-restriction-tpp-id.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0004-remove-not-null-requested-execution-date-time.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0005-add-column-authorization-type.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0006-change-pis-tpp-info.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0007-remove-not-null-constraint-ultimate-debtor.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0008-add-account-reference-resource-id.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0009-create-psu-data-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0010-add-fk-constraints-for-psu-id-columns.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0011-remove-password-column-from-ais-consent-authorization.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0012-create-table-crypto-algorithm.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0013-add-pis-payment-data-transaction-status.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0014-rename-pis-account-reference-to-account-reference.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0015-fill-crypto-algorithms.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0016-add-piis-consent.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0017-create-aspsp-consent-data-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0018-add-status-to-tpp-info.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0019-create-event-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0020-create-pis-common-payment-data.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0021-add-expiration-timestamp-authorisation.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0022-ais-replace-tpp-id-with-tpp-info.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0023-add-column-instance-id.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0024-remove-status-column-from-tpp-info-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0025-create-tpp-stop-list-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0026-remove-pis-consent.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0027-add-column-instance-id-for-tpp-stop-list-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0028-add-column-instance-id-for-ais-consent-authorisation.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0029-add-column-instance-id-for-piis_consent.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0030-change-structure-for-ais-account-access.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0031-add-column-instance-id-for-pis-consent-authorisation.xml"/>
+    <include relativeToChangelogFile="true"
+             file="migration/0032-add-creation-timestamp-ais-consent-pis-common-payment.xml"/>
+    <include relativeToChangelogFile="true"
+             file="migration/0033-add-not-null-constraint-ais-aspsp-account-access.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0034-add-account-id-column-to-pis-common-payment.xml"/>
+    <include relativeToChangelogFile="true"
+             file="migration/0035-set-pis-consent-authorization-chosen_sca_method-type-to-varchar-40.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0036-add-aspsp-account-id-column-to-account-reference.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0037-remove-default-values-from-tpp-info.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0038-update-not-null-constraints-in-tpp-info.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0039-add-multiple-sca-required-column-to-pis-commom-payment.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0040-add-not-null-constraint-to-common-payment-id.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0041-add-creation-timestamp-to-piis-consent.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0042-add-tan-to-pis-consent-authorization.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0043-create-pis-authorization-sca-approach.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0044-add-columns-to-ais-consent.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0045-create-ais-available-sca-method.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0046-change-authority-id-type-to-varchar.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0047-add-ais-consent-psu-data-table.xml"/>
+    <include relativeToChangelogFile="true"
+             file="migration/0048-add-column-sca-approach-for-ais-consent-authorisation-and-pis-authorisation.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0049-remove-transaction-status-column-from-pis-payment-data-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0050-add-multiple-sca-required-column-to-ais-consent.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0051-change-column-types-in-tpp-info-from-clob-to-varchar.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0052-add-ais-consent-usage-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0053-add-columns-to-event-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0054-add-columns-to-pis-ais-piis-tables.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0055-add-card-columns-to-piis_consent.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0056-add-account-column-to-piis_consent.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0057-transfer-first-account-from-accounts-to-account-in-piis-consent.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0059-remove-usage-counter-column-from-ais-consent-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0060-add-request-uri-column-to-ais-consent-usage.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0061-change-table-account-reference-extend-iban.xml"/>
+    <include relativeToChangelogFile="true"
+             file="migration/0062-change-table-pis-payment-data-extend-end-to-end-identification.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0063-expand-table-crypto-algorithm-with-fields.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0064-expand-table-crypto-algorithm-with-fields-class-and-params.xml"/>
+    <!-- moved this patсh to the end of the list according to order of applying-->
+    <include relativeToChangelogFile="true" file="migration/0058-drop-table-piis_consent-acc-reference.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0065-add-accounts-with-balances-column-to-ais-consent.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0066-add-redirect-exp-column-to-auth-tables.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0067-add-cancel-tpp-redirect-urls-columns-to-tpp-info.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0068-remove-deprecated-columns-from-crypto-algorithm-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0069-remove-authority-id-column-from-unique-constraint-in-tpp-stop-list-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0070-add-internal-request-id-to-event-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0071-add-tpp-authorisation-number-to-piis-consent-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0072-add-batch-booking-preferred-to-pis-payment-data-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0073-remove-deprecated-column-from-tpp-stop-list-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0074-add-tpp-redirect-nok-redirect-columns-to-aispis-consent-authorization-tables.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0075-add-authorisation-template-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0076-add-unique-null-constraint-to-tpp-authorisation-number.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0077-remove-deprecated-column-allowed-frequency-per-day-from-piis-consent-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0078-remove-column-tpp-info-id-from-authorisation-template-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0079-remove-foreign-key-tpp-info-id-from-piis-consent.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0080-add-indexes-for-external-ids.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0081-add-additional-information-type-columns-to-ais-consent.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0082-add-internal-request-ids.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0083-add-sca-authentication-data-to-pis-consent-authorization.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0084-add-value-to-owner-name-type-and-owner-address-type-columns-in-ais-consent-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0085-create-ais-consent-transaction-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0086-add-columns-to-ais-consent-usage-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0087-remove-tpp-redirect-uri-from-tpp-info-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0088-create-ais-consent-tpp-ntfc-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0089-create-payment-tpp-ntfc-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0090-remove-tan-from-pis-consent-authorization.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0091-add-column-checksum-to-ais-consent-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0092-create-additional-psu-data-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0093-delete-sequences-for-notification.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0094-add-instruction-identification-column-to-pis-payment-data-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0095-add-column-valid-until-to-ais-consent-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0096-add-authorisation-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0097-add-column-content-type-to-pis-common-payment-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0098-create-consent-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0099-migrate-piis-consents-to-consent-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0100-add-tpp-brand-logging-information.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0101-remove-owner-address-type-from-ais-consent.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0102-add-trusted-beneficiaries-type-column-to-consent-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0103-drop-consent-authorization-and-available-sca-method-tables-for-ais-pis.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0104-add-value-to-trusted-beneficiaries-type-column-in-consent-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0105-change-datetime-types-in-consent-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0106-add-consent-psu-data-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0107-add-consent-usage-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0108-add-account-access-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0109-add-aspsp-account-access-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0110-increase-length-of-tpp-uri-columns-in-authorisation-template-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0111-remove-deprecated-type-access-from-account-access-tables.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0112-increase-length-of-psu-accept-column.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0113-drop-tables-with-ais-prefix.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0114-increase-length-of-postCode-column.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0115-added-type-column-to-authorisation-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0116-changed-owner-name-type-for-piis-consent.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0117-removed-authorisation-type-column-from-authorisation-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0118-add-signing-basket-blocked-column-consent-payment-tables.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0119-add-signing-basket-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0120-add-signing-basket-authorised-column-consent-payment-tables.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0121-added-internal-payment-status.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0122-added-total-pages-and-booking-status-columns.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0123-add-additional-info-to-consent-tpp-information.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0124-refactor-aspsp-account-access-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0125-refactor-account-access-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0126-remove-deprecated-consent-tables.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0127-create-missing-indexes-for-consent-related-tables.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0128-create-missing-indexes-for-payment-related-tables.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0129-adding-other-columns-for-tpp_stop_list-related-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0130-remove-instance-id-from-tpp-info.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0131-change-column-date-to-datetime-in-consent-table.xml"/>
+    <include relativeToChangelogFile="true" file="migration/0132-change-column-date-to-datetime-in-consent-table.xml"/>
+</databaseChangeLog>

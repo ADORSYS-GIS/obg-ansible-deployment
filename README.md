@@ -53,15 +53,13 @@ The repository includes various playbook files in the `playbooks` directory:
 
 1. **`obg.yml`**: This playbook file is specifically designed for the deployment of the OBG components.
 2. **`xs2a.yml`**: This playbook file is specifically designed for the deployment of the XS2A components.
-3. **`xs2a-connector-examples.yml`**: This playbook file is specifically designed for the deployment of the xs2a-connector-examples component.
-4. **`deploy-all.yml`**: This is the playbook file specifically designed for the deployment of all the components in one go.
+3. **`deploy-all.yml`**: This is the playbook file specifically designed for the deployment of all the components in one go.
 
 To prepare your environment:
 
 1. Choose the appropriate playbook file based on your deployment scenario:
    - For OBG deployments, use the `obg.yml` file.
    - For XS2A deployments, use the `xs2a.yml` file.
-   - For xs2a-connector-examples deployment, use the `xs2a-connector-examples.yml` file.
    - For deploying all components, use the `deply-all.yml` file.
 
 2. To use any of the above files for your desired deployment:

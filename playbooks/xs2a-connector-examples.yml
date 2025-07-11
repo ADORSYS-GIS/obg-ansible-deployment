@@ -1,7 +1,0 @@
-# Playbook: Build Ansible Script for xs2a-connector-examples
-- name: Deploy XS2A Connectors Example
-  hosts: all
-  become: yes
-
-  roles:
-    - xs2a-connector-examples

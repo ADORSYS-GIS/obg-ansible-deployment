@@ -1,4 +1,4 @@
-# Playbook: Build Ansible Script for xs2a
+# Playbook: Build Ansible Script for xs2a components
 - name: Deploy XS2A Component
   hosts: all
   become: yes
@@ -7,3 +7,4 @@
     - aspsp-profile-server
     - cms-standalone-service
     - xs2a-standalone-starter
+    - xs2a-connector-examples

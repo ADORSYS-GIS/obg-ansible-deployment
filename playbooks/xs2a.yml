@@ -2,6 +2,7 @@
 - name: Deploy XS2A Component
   hosts: all
   become: yes
+
   roles:
     - aspsp-profile-server
     - cms-standalone-service

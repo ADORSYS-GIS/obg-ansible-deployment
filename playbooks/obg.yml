@@ -2,6 +2,7 @@
 - name: Deploy OBG Environment
   hosts: all
   become: yes
+
   roles:
     - postgres
     - obg

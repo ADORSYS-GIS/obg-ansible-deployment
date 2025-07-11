@@ -1,3 +1,4 @@
-# Playbook: Build Ansible Script for OBG and xs2a
+# Playbook: Build Ansible Script for OBG, xs2a and xs2a-connector-examples
 - import_playbook: obg.yml
 - import_playbook: xs2a.yml
+- import_playbook: xs2a-connector-examples.yml

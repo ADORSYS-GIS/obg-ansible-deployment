@@ -60,7 +60,7 @@ To prepare your environment:
 1. Choose the appropriate playbook file based on your deployment scenario:
    - For OBG deployments, use the `obg.yml` file.
    - For XS2A deployments, use the `xs2a.yml` file.
-   - For deploying all components, use the `deply-all.yml` file.
+   - For deploying all components, use the `deploy-all.yml` file.
 
 2. To use any of the above files for your desired deployment:
    - Navigate to the project directory, and modify the `test.sh` script - Line 94, replacing `<your-playbook>` with your desired playbook:
@@ -71,7 +71,7 @@ By selecting and configuring the appropriate playbook file, you ensure that the 
 
 #### C - CMS-Standalone-Service Path Configuration
 
-Navigate to the root of project, and run the following command to get the current working directory path:
+Navigate to the root of the project, and run the following command to get the current working directory path:
 ```bash
 pwd
 ```

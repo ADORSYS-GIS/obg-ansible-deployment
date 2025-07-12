@@ -48,38 +48,48 @@ To prepare your environment:
 By selecting and configuring the appropriate inventory file, you ensure that the deployment is tailored to your specific environment.
 
 #### B - Playbooks
+The `playbooks` directory in this repository contains playbooks for deploying the various components of the project.
 
-The repository includes various playbook files in the `playbooks` directory:
+##### 1. Available Playbooks
+- `obg.yml`:
+      Use this playbook to deploy only the OBG components.
 
-1. **`obg.yml`**: This playbook file is specifically designed for the deployment of the OBG components.
-2. **`xs2a.yml`**: This playbook file is specifically designed for the deployment of the XS2A components.
-3. **`deploy-all.yml`**: This is the playbook file specifically designed for the deployment of all the components in one go.
+- `xs2a.yml`:
+Use this playbook to deploy only the XS2A components.
 
-To prepare your environment:
+- `deploy-all.yml`:
+Use this playbook to deploy both OBG and XS2A components simultaneously in a single run.
 
-1. Choose the appropriate playbook file based on your deployment scenario:
-   - For OBG deployments, use the `obg.yml` file.
-   - For XS2A deployments, use the `xs2a.yml` file.
-   - For deploying all components, use the `deploy-all.yml` file.
+##### 2. Preparing your environment:
 
-2. To use any of the above files for your desired deployment:
-   - Navigate to the project directory, and modify the `test.sh` script - Line 94, replacing `<your-playbook>` with your desired playbook:
+1. **Choose the appropriate playbook**  
+   Select the playbook that matches your deployment scenario: `obg.yml`, `xs2a.yml`, or `deploy-all.yml`.
+
+2. **Update your project path _(XS2A only)_**  
+   If you are deploying **XS2A** (using `xs2a.yml`) or **both XS2A & OBG** (using `deploy-all.yml`), update the path as follows:
+
+   - Navigate to the root of the project and run:
      ```bash
-     PLAYBOOK_FILE="playbooks/<your-playbook>"
+     pwd
      ```
-By selecting and configuring the appropriate playbook file, you ensure that the deployment is tailored to your specific environment.
+     This outputs the absolute path to your local repository.
 
-#### C - CMS-Standalone-Service Path Configuration
+   - Open `roles/cms-standalone-service/tasks/main.yml` and go to **Line 115**.  
+     Replace `<path/to/your/local/repo>` with the output from the previous step. For example:
+     ```bash
+     /home/john/obg-ansible-deployment/
+     ```
 
-Navigate to the root of the project, and run the following command to get the current working directory path:
-```bash
-pwd
-```
+   > **Note:** This step is **not needed** if you are only deploying OBG.
 
-Then, edit the `roles/cms-standalone-service/tasks/main.yml` file (Line 115) and replace `<path/to/your/local/repo>` with the output of the above command. For example:
-```bash
-/home/john/obg-ansible-deployment/
-```
+3. **Update the test script**  
+   In the `test.sh` script, go to **Line 94** and set the playbook you want to run:
+   ```bash
+   PLAYBOOK_FILE="playbooks/<your-playbook>"
+   ```
+   Replace `<your-playbook>` with `obg.yml`, `xs2a.yml`, or `deploy-all.yml`.
+
+By selecting the correct playbook and updating the configuration when needed, you ensure a smooth and accurate deployment for your chosen setup.
 
 ## Running the Deployment
 

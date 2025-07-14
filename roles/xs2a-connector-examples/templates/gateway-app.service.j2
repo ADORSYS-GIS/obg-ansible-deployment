@@ -1,0 +1,15 @@
+[Unit]
+Description=XS2A Connector Examples Service
+After=network.target
+
+[Service]
+User=root
+Environment=SERVER_KEY=123
+Environment=SPRING_PROFILES_ACTIVE=mock-qwac
+ExecStart=/usr/bin/java -jar /usr/share/java/gateway-app.jar
+SuccessExitStatus=143
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

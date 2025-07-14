@@ -7,3 +7,5 @@ cms_db_user: cms
 cms_db_password: cms
 cms_db_schema: consent
 cms_db_host: localhost
+
+cms_schema_dir: "{{ playbook_dir }}/../consent-management/cms-db-schema"

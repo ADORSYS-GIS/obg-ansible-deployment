@@ -3,7 +3,7 @@ Description=ASPSP Profile Server
 After=network.target
 
 [Service]
-User=obg
+User=root
 ExecStart=/usr/bin/java -jar /usr/share/java/aspsp-profile-exec.jar
 SuccessExitStatus=143
 Restart=on-failure

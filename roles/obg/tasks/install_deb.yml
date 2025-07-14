@@ -44,7 +44,7 @@
 
 - name: Generate application.yml from template
   template:
-    src: "{{ playbook_dir }}/roles/obg/templates/application.yml.j2"
+    src: application.yml.j2
     dest: /opt/obg/config/application.yml
     owner: obg
     group: obg

@@ -71,10 +71,16 @@
     delay: 5
     timeout: 60
 
+- name: Ensure CMS Liquibase schema dir exists
+  file:
+    path: "{{ playbook_dir }}/../consent-management/cms-db-schema"
+    state: directory
+    mode: "0755"
+
 - name: Copy liquibase.properties (templated)
   template:
     src: liquibase.properties.j2
-    dest: "{{ playbook_dir }}/consent-management/cms-db-schema/liquibase.properties"
+    dest: "{{ playbook_dir }}/../consent-management/cms-db-schema/liquibase.properties"
     mode: "0644"
 
 - name: Create 'consent' schema
@@ -109,7 +115,7 @@
     mvn -f <path/to/your/local/repo>/consent-management/cms-db-schema/pom-liquibase.xml \
       -DpropertyFile=liquibase.properties liquibase:update
   args:
-    chdir: "{{ playbook_dir }}/consent-management/cms-db-schema"
+    chdir: "{{ cms_schema_dir }}"
   environment:
     MAVEN_OPTS: "-Dmaven.repo.local={{ ansible_env.HOME }}/.m2/repository"
 

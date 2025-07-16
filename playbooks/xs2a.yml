@@ -4,7 +4,13 @@
   become: yes
 
   roles:
+  # xs2a
     - aspsp-profile-server
     - cms-standalone-service
-    - xs2a-standalone-starter
+  # xs2a-connector-examples
     - xs2a-connector-examples
+  # xs2a-sandbox
+    - admin-rest-server
+    - online-banking-app
+    - tpp-rest-server
+    - xs2a-sandbox-ui's

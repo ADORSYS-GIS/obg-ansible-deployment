@@ -1,0 +1,82 @@
+- name: Install OpenJDK 17
+  apt:
+    name: openjdk-17-jdk
+    state: present
+
+- name: Set JAVA_HOME for all users
+  lineinfile:
+    path: /etc/environment
+    line: 'JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64'
+    create: yes
+
+- name: Set Java 17 as default
+  shell: |
+    update-alternatives --set java /usr/lib/jvm/java-17-openjdk-amd64/bin/java
+    update-alternatives --set javac /usr/lib/jvm/java-17-openjdk-amd64/bin/javac
+  args:
+    executable: /bin/bash
+    
+- name: Ensure /opt exists
+  file:
+    path: /opt
+    state: directory
+    mode: '0755'
+
+- name: Download Keycloak 22.0.3
+  get_url:
+    url: https://github.com/keycloak/keycloak/releases/download/22.0.3/keycloak-22.0.3.tar.gz
+    dest: /tmp/keycloak-22.0.3.tar.gz
+    mode: '0644'
+
+- name: Create Keycloak directory
+  file:
+    path: /opt/keycloak
+    state: directory
+    mode: '0755'
+
+- name: Extract Keycloak archive
+  unarchive:
+    src: /tmp/keycloak-22.0.3.tar.gz
+    dest: /opt/keycloak
+    remote_src: yes
+    extra_opts: [--strip-components=1]
+
+- name: Create Keycloak data directory
+  file:
+    path: /opt/keycloak/data
+    state: directory
+    mode: '0777'
+
+- name: Deploy signing key for Ledgers APT repo
+  copy:
+    src: ledgers.gpg
+    dest: /etc/apt/keyrings/ledgers.gpg
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Add APT repo for Keycloak token exchange
+  deb822_repository:
+    name: ledgers
+    types: deb
+    uris: https://ledgers-deb.obgdeb.com/debian/
+    suites: jammy
+    components: [main]
+    architectures: amd64
+    signed_by: /etc/apt/keyrings/ledgers.gpg
+
+#- name: Update APT cache after adding Ledgers repo
+#  command: apt-get update
+#  changed_when: false
+
+- name: Remove old keycloak-token-exchange package
+  apt:
+    name: keycloak-token-exchange
+    state: absent
+    purge: yes
+
+- name: Install keycloak-token-exchange package
+  apt:
+    name: keycloak-token-exchange
+    state: present
+    update_cache: yes

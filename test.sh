@@ -79,9 +79,9 @@ podman run \
 	-p 127.0.0.1:8090:8090 \
 	-p 127.0.0.1:8093:8093 \
 	-p 127.0.0.1:4207:4207 \
-  -p 127.0.0.1:4206:4206 \
-  -p 127.0.0.1:4205:4205 \
-  -p 127.0.0.1:4400:4400 \
+        -p 127.0.0.1:4206:4206 \
+        -p 127.0.0.1:4205:4205 \
+        -p 127.0.0.1:4400:4400 \
 	-v $PWD/consent-management:$PWD/consent-management:Z \
 	--systemd=always \
 	-d localhost/ansible-obg-test sh -c "exec /usr/sbin/init --show-status"

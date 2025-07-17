@@ -1,0 +1,5 @@
+- name: Download + Install Keycloak
+  include_tasks: install-and-download-keycloak.yml
+
+- name: Configure Keycloak and Systemd
+  include_tasks: prepare-and-configure-keycloak.yml

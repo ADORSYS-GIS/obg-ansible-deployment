@@ -1,0 +1,44 @@
+# Prepare Keycloak directory for custom extensions
+- name: Ensure providers directory exists
+  file:
+    path: /opt/keycloak/providers
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+# Copy JAR file from installed package
+- name: Find token exchange jar
+  find:
+    paths: /usr/share/java/
+    patterns: 'keycloak-token-exchange.jar'
+  register: jar_file
+
+- name: Copy token exchange jar to Keycloak providers
+  copy:
+    src: "{{ item.path }}"
+    dest: /opt/keycloak/providers/keycloak-token-exchange.jar
+    remote_src: yes
+    owner: root
+    group: root
+    mode: '0644'
+  loop: "{{ jar_file.files }}"
+
+# Deploy systemd service for Keycloak
+- name: Copy Keycloak systemd service
+  template:
+    src: keycloak.service.j2
+    dest: /etc/systemd/system/keycloak.service
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Reload systemd daemon
+  systemd:
+    daemon_reload: true
+
+- name: Enable and start Keycloak
+  systemd:
+    name: keycloak
+    enabled: true
+    state: started

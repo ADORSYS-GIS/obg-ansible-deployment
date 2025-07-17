@@ -1,0 +1,46 @@
+---
+- name: Deploy signing key for Ledgers App
+  copy:
+    src: ledgers.gpg
+    dest: /etc/apt/keyrings/ledgers.gpg
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Add APT repo for Ledgers App
+  deb822_repository:
+    name: ledgers
+    types: deb
+    uris: https://ledgers-deb.obgdeb.com/debian/
+    suites: jammy
+    components:
+      - main
+    architectures: amd64
+    signed_by: /etc/apt/keyrings/ledgers.gpg
+
+- name: Clean up old Ledgers App package
+  apt:
+    name: ledgers-app
+    state: absent
+    purge: yes
+
+- name: Install Ledgers App Debian package
+  apt:
+    name: ledgers-app
+    state: present
+    update_cache: yes
+
+- name: Copy systemd service file for Ledgers App
+  template:
+    src: ledgers-app.service.j2
+    dest: /etc/systemd/system/ledgers-app.service
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Reload systemd
+
+- name: Ensure Ledgers App service is enabled and started
+  systemd:
+    name: ledgers-app
+    state: started
+    enabled: true

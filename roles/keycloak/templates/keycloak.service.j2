@@ -1,0 +1,14 @@
+[Unit]
+Description=Keycloak Server
+After=network.target
+
+[Service]
+User=root
+WorkingDirectory=/opt/keycloak
+ExecStart=/opt/keycloak/bin/kc.sh start-dev
+Restart=always
+Environment="KEYCLOAK_ADMIN={{ keycloak_admin }}"
+Environment="KEYCLOAK_ADMIN_PASSWORD={{ keycloak_admin_password }}"
+
+[Install]
+WantedBy=multi-user.target

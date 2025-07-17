@@ -6,5 +6,7 @@
   roles:
     - aspsp-profile-server
     - cms-standalone-service
-    - xs2a-standalone-starter
     - xs2a-connector-examples
+  # ledgers
+    - keycloak
+    - ledgers-app

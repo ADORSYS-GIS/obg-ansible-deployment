@@ -1,0 +1,11 @@
+[Unit]
+Description=Dev Portal UI Service
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 -m http.server 4206 --directory /usr/share/dev-portal-ui
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

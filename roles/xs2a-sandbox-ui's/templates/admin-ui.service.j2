@@ -1,0 +1,11 @@
+[Unit]
+Description=Admin UI Service
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 -m http.server 4207 --directory /usr/share/admin-ui
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

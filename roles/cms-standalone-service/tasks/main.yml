@@ -92,6 +92,15 @@
     login_password: "{{ cms_db_password }}"
     query: "CREATE SCHEMA IF NOT EXISTS consent AUTHORIZATION cms;"
 
+- name: Create 'tpp' schema
+  community.postgresql.postgresql_query:
+    db: "{{ cms_db_name }}"
+    login_host: "127.0.0.1"
+    port: "{{ cms_postgres_host_port }}"
+    login_user: "{{ cms_db_user }}"
+    login_password: "{{ cms_db_password }}"
+    query: "CREATE SCHEMA IF NOT EXISTS tpp AUTHORIZATION cms;"
+
 - name: Create 'public' schema
   community.postgresql.postgresql_query:
     db: "{{ cms_db_name }}"

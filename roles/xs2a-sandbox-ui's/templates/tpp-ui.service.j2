@@ -1,0 +1,11 @@
+[Unit]
+Description=TPP UI Service
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 -m http.server 4205 --directory /usr/share/tpp-ui
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

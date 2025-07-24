@@ -4,7 +4,12 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/python3 -m http.server 4207 --directory /usr/share/admin-ui
+Environment="ADMIN_REST_SERVER_URL=http://localhost:8094"
+Environment="CERT_GEN_URL=http://localhost:8092"
+Environment="NGINX_ACCESS_LOG_DEBUG=combined"
+Environment="NGINX_ERROR_LOG_DEBUG=error"
+ExecStart=/opt/admin-ui/entry.sh
+WorkingDirectory=/opt/admin-ui
 Restart=always
 
 [Install]

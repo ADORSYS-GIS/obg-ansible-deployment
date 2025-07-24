@@ -4,7 +4,12 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/python3 -m http.server 4400 --directory /usr/share/oba-ui
+Environment="ONLINE_BANKING_SERVER_URL=http://localhost:8090"
+Environment="DEV_PORTAL_URL_EXT=http://localhost:4206"
+Environment="NGINX_ACCESS_LOG_DEBUG=combined"
+Environment="NGINX_ERROR_LOG_DEBUG=error"
+ExecStart=/opt/oba-ui/entry.sh
+WorkingDirectory=/opt/oba-ui
 Restart=always
 
 [Install]

@@ -9,7 +9,7 @@
 
 - name: Add APT repo for XS2A Sandbox UI's
   deb822_repository:
-    name: xs2a-sandbox-ui's
+    name: xs2a-sandbox-ui
     types: deb
     uris: https://xs2a-sandbox-ui.obgdeb.com/debian/
     suites: jammy
@@ -23,7 +23,7 @@
     name:
       - tpp-ui
       - admin-ui
-      - dev-portal-ui
+      - developer-portal
       - oba-ui
     state: absent
     purge: yes
@@ -33,7 +33,7 @@
     name:
       - tpp-ui
       - admin-ui
-      - dev-portal-ui
+      - developer-portal
       - oba-ui
     state: present
     update_cache: yes

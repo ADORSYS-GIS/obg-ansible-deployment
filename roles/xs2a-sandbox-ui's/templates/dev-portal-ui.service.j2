@@ -4,7 +4,10 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/python3 -m http.server 4206 --directory /usr/share/dev-portal-ui
+Environment="XS2A_URL=http://localhost:8089"
+Environment="ASPSP_URL=http://localhost:8080"
+ExecStart=/opt/dev-portal-ui/entry.sh
+WorkingDirectory=/opt/dev-portal-ui
 Restart=always
 
 [Install]

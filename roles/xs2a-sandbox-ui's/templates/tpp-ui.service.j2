@@ -4,7 +4,11 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/python3 -m http.server 4205 --directory /usr/share/tpp-ui
+Environment="TPP_REST_SERVER_URL=http://localhost:8093"
+Environment="CERT_GEN_URL=http://localhost:8092"
+Environment="CERT_GEN_ENABLED=true"
+ExecStart=/opt/tpp-ui/entry.sh
+WorkingDirectory=/opt/tpp-ui
 Restart=always
 
 [Install]

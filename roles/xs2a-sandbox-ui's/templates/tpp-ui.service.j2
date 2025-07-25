@@ -1,0 +1,15 @@
+[Unit]
+Description=TPP UI Service
+After=network.target
+
+[Service]
+Type=simple
+Environment="TPP_REST_SERVER_URL=http://localhost:8093"
+Environment="CERT_GEN_URL=http://localhost:8092"
+Environment="CERT_GEN_ENABLED=true"
+ExecStart=/opt/tpp-ui/entry.sh
+WorkingDirectory=/opt/tpp-ui
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

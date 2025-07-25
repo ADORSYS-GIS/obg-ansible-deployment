@@ -13,6 +13,7 @@ RUN apt-get update -yqq && \
     apt-get install -yqq \
                    ansible \
                    apt-utils \
+                    nginx\
 		   cron \
                    git \
                    locales \
@@ -23,7 +24,10 @@ RUN apt-get update -yqq && \
                    sudo \
                    systemd \
                    temurin-21-jre \
-                   whois # mkpasswd provided by whois package
+                   gettext-base \
+                   whois && \
+               rm /etc/nginx/sites-enabled/default && \
+               apt-get clean && rm -rf /var/lib/apt/lists/* && apt-get update
 
 RUN mkdir -p /etc/ansible/facts.d
 

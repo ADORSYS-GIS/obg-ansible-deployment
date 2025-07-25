@@ -1,0 +1,14 @@
+[Unit]
+Description=Dev Portal UI Service
+After=network.target
+
+[Service]
+Type=simple
+Environment="XS2A_URL=http://localhost:8089"
+Environment="ASPSP_URL=http://localhost:8080"
+ExecStart=/opt/dev-portal-ui/entry.sh
+WorkingDirectory=/opt/dev-portal-ui
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

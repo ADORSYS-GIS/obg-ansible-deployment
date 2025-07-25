@@ -1,0 +1,5 @@
+cms_db_name: consent
+cms_db_user: cms
+cms_db_password: cms
+cms_postgres_host_port: 5433
+cms_db_host: localhost

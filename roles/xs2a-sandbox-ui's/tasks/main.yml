@@ -1,0 +1,78 @@
+---
+- name: Deploy signing key for UI packages
+  copy:
+    src: xs2a-sandbox-ui.gpg
+    dest: /etc/apt/keyrings/xs2a-sandbox-ui.gpg
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Add APT repo for XS2A Sandbox UI's
+  deb822_repository:
+    name: xs2a-sandbox-ui
+    types: deb
+    uris: https://xs2a-sandbox-ui.obgdeb.com/debian/
+    suites: jammy
+    components:
+      - main
+    architectures: amd64
+    signed_by: /etc/apt/keyrings/xs2a-sandbox-ui.gpg
+
+- name: Clean up old XS2A Sandbox UI packages
+  apt:
+    name:
+      - tpp-ui
+      - admin-ui
+      - developer-portal
+      - oba-ui
+    state: absent
+    purge: yes
+
+- name: Install XS2A Sandbox UI Debian packages
+  apt:
+    name:
+      - tpp-ui
+      - admin-ui
+      - developer-portal
+      - oba-ui
+    state: present
+    update_cache: yes
+
+- name: Copy systemd service file for Admin UI
+  template:
+    src: admin-ui.service.j2
+    dest: /etc/systemd/system/admin-ui.service
+  notify: Reload systemd
+
+- name: Copy systemd service file for Dev Portal UI
+  template:
+    src: dev-portal-ui.service.j2
+    dest: /etc/systemd/system/dev-portal-ui.service
+  notify: Reload systemd
+
+- name: Copy systemd service file for TPP UI
+  template:
+    src: tpp-ui.service.j2
+    dest: /etc/systemd/system/tpp-ui.service
+  notify: Reload systemd
+
+- name: Copy systemd service file for OBA UI
+  template:
+    src: oba-ui.service.j2
+    dest: /etc/systemd/system/oba-ui.service
+  notify: Reload systemd
+
+- name: Reload systemd
+  systemd:
+    daemon_reload: yes
+
+- name: Enable and start all XS2A Sandbox UI services
+  systemd:
+    name: "{{ item }}"
+    state: started
+    enabled: yes
+  loop:
+    - tpp-ui
+    - admin-ui
+    - dev-portal-ui
+    - oba-ui

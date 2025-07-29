@@ -1,0 +1,24 @@
+[Unit]
+Description=TPP Rest Server
+After=network.target
+
+[Service]
+User=root
+Environment=DB_HOST={{ cms_db_host }}
+Environment=DB_PORT={{ cms_postgres_host_port }}
+Environment=DB_NAME={{ cms_db_name }}
+Environment=DB_USER={{ cms_db_user }}
+Environment=DB_PASSWORD={{ cms_db_password }}
+ExecStart=/usr/bin/java -jar /usr/share/java/tpp-rest-server.jar \
+--spring.profiles.active=postgres \
+--db.host=${DB_HOST} \
+--db.port=${DB_PORT} \
+--db.database=${DB_NAME} \
+--db.username=${DB_USER} \
+--db.password=${DB_PASSWORD}
+SuccessExitStatus=143
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

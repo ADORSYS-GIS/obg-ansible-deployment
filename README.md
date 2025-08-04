@@ -6,7 +6,8 @@ This guide will help you set up and run the OBG and xs2a deployments using Ansib
 
 1. [Installation Steps](#installation-steps)
 2. [Running the Deployment](#running-the-deployment)
-3. [Configuration Reference](#configuration-reference)
+3. [Component Dependencies](#component-dependencies)
+4. [Configuration Reference](#configuration-reference)
 
 ## Installation Steps
 
@@ -90,6 +91,50 @@ Use this playbook to deploy both OBG and XS2A components simultaneously in a sin
    Replace `<your-playbook>` with `obg.yml`, `xs2a.yml`, or `deploy-all.yml`.
 
 By selecting the correct playbook and updating the configuration when needed, you ensure a smooth and accurate deployment for your chosen setup.
+
+## Component Dependencies
+
+### ⚠️ Important: OBG Requires XS2A Components
+
+**For full functionality and successful transactions, the OBG (Open Banking Gateway) requires XS2A components to be running.**
+
+#### Why is this necessary?
+
+1. **Sandbox Services**: OBG connects to XS2A sandbox services for:
+   - Banking protocol testing
+   - OAuth server functionality
+   - HBCI mock services
+   - Payment processing simulations
+
+2. **Configuration Dependencies**: OBG's service configuration includes URLs that point to XS2A services:
+   ```yaml
+   sandbox_url: http://localhost:8089/          # XS2A Sandbox UI
+   sandbox-oauth-server-url: http://localhost:4400/  # Online Banking Application UI (OAuth redirects here)
+   hbci_sandbox_url: http://localhost:8090/     # XS2A HBCI Mock
+   ```
+
+3. **Transaction Flow**: Complete payment and consent flows require:
+   - XS2A Connector for banking protocol communication
+   - XS2A Sandbox UI for user interactions
+   - CMS Standalone Service for consent management
+
+#### Deployment Recommendations
+
+| Scenario | Playbook | Status | Notes |
+|----------|----------|--------|-------|
+| **Full System** | `deploy-all.yml` | ✅ **Recommended** | Complete functionality with all components |
+| **XS2A Only** | `xs2a.yml` | ✅ **Functional** | XS2A components only, no OBG |
+| **OBG Only** | `obg.yml` | ⚠️ **Limited** | OBG will start but transactions may fail |
+
+#### What happens if you deploy OBG without XS2A?
+
+- ✅ OBG service will start successfully
+- ✅ Basic functionality will work
+- ❌ Payment transactions will fail with connection errors
+- ❌ Sandbox interactions will not work
+- ❌ OAuth flows will be incomplete
+
+**For Troubleshooting**: Deploy components individually to isolate issues
 
 ## Running the Deployment
 

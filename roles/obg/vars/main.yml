@@ -11,3 +11,6 @@ opba_base_url: "https://obg.localhost"
 fintech_base_url: "https://fintech.localhost"
 fintech_ui_url: "https://fintech-ui.localhost"
 piis_ui_url: "https://piis-ui.localhost"
+
+sandbox_url: http://localhost:8089
+oauth_server_url: http://localhost:4400

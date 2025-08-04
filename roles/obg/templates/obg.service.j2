@@ -4,10 +4,10 @@ After=network.target
 
 [Service]
 User=obg
-ExecStart=/usr/bin/java -jar /usr/share/java/open-banking-gateway-1.0.2-SNAPSHOT-exec.jar \
+ExecStart=/usr/bin/java -Dspring.profiles.active=no-signature-filter -jar /usr/share/java/open-banking-gateway-1.0.2-SNAPSHOT-exec.jar \
   --spring.config.location=classpath:/,file:/opt/obg/config/application.yml
-Environment="SPRING_LIQUIBASE_PARAMETERS_ADORSYS-SANDBOX-URL=https://obg-bank-dev-xs2a.cloud.adorsys.de"
-Environment="SPRING_LIQUIBASE_PARAMETERS_ADORSYS-HBCI-SANDBOX-URL=http://localhost:8090/hbci-mock/"
+  --spring.liquibase.parameters.adorsys-sandbox-url={{sandbox_url}} \
+  --spring.liquibase.parameters.adorsys-sandbox-oauth-server-url={{oauth_server_url}} \
 SuccessExitStatus=143
 Restart=on-failure
 RestartSec=10

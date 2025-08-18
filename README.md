@@ -75,7 +75,7 @@ Use this playbook to deploy both OBG and XS2A components simultaneously in a sin
      ```
      This outputs the absolute path to your local repository.
 
-   - Open `roles/cms-standalone-service/tasks/main.yml` and go to **Line 115**.  
+   - Open `roles/cms-standalone-service/tasks/main.yml` and go to **Line 124**.  
      Replace `<path/to/your/local/repo>` with the output from the previous step. For example:
      ```bash
      /home/john/obg-ansible-deployment/

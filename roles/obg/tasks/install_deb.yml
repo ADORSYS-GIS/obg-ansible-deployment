@@ -11,7 +11,7 @@
   deb822_repository:
     name: OBG
     types: deb
-    uris: https://dw6najmw58pwo.cloudfront.net/debian/
+    uris: https://opba-fintech-deb.obgdeb.com/debian/
     suites: jammy
     components:
       - main
@@ -21,16 +21,16 @@
 - name: Clean up packages
   apt:
     name:
-      - fintech-server
       - open-banking-gateway
+      - taler-wise-server
     state: absent
     purge: yes
 
-- name: Install Fintech-server and Open Banking Gateway Debian packages
+- name: Install Taler-wise-server and Open Banking Gateway Debian packages
   apt:
-    name: 
-    - fintech-server
+    name:
     - open-banking-gateway
+    - taler-wise-server
     state: present
     update_cache: yes
 
@@ -50,10 +50,10 @@
     group: obg
     mode: '0644'
 
-- name: Copy FinTech Server systemd service file
+- name: Copy Taler-wise Server systemd service file
   template:
-    src: fintech-server.service.j2
-    dest: /etc/systemd/system/fintech.service
+    src: taler-wise-server.service.j2
+    dest: /etc/systemd/system/taler-wise-server.service
     group: obg
     owner: obg
     mode: '0644'
@@ -68,9 +68,9 @@
     mode: '0644'
   notify: Reload systemd
 
-- name: Ensure FinTech Server service is enabled and started
+- name: Ensure Taler-wise Server service is enabled and started
   systemd:
-    name: fintech.service
+    name: taler-wise-server.service
     state: started
     enabled: true
   notify: Reload systemd

@@ -4,10 +4,9 @@ spring:
     username: {{ db_user }}
     driver-class-name: org.postgresql.Driver
     use-user-credentials: true
-
-liquibase:
-  enabled: false
-  contexts: dev,mock-banks,xs2a-banks
+  liquibase:
+    enabled: true
+    contexts: dev,mock-banks,xs2a-banks
 
 api:
   banking:

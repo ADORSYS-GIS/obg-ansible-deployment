@@ -84,7 +84,7 @@ Use this playbook to deploy both OBG and XS2A components simultaneously in a sin
    > **Note:** This step is **not needed** if you are only deploying OBG.
 
 3. **Update the test script**  
-   In the `test.sh` script, go to **Line 94** and set the playbook you want to run:
+   In the `test.sh` script, go to **Line 104** and set the playbook you want to run:
    ```bash
    PLAYBOOK_FILE="playbooks/<your-playbook>"
    ```

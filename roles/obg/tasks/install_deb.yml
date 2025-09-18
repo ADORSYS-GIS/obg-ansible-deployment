@@ -7,11 +7,22 @@
     group: root
     mode: '0644'
 
+- name: Add Taler-wise-server APT repo
+  deb822_repository:
+    name: TALERWISE
+    types: deb
+    uris: https://opba-fintech-deb.obgdeb.com/debian/
+    suites: jammy
+    components:
+      - main
+    architectures: amd64
+    signed_by: /etc/apt/keyrings/obg.gpg
+
 - name: Add Open Banking Gateway APT repo
   deb822_repository:
     name: OBG
     types: deb
-    uris: https://opba-fintech-deb.obgdeb.com/debian/
+    uris: https://opba-deb.obgdeb.com/debian/
     suites: jammy
     components:
       - main

@@ -5,7 +5,7 @@
     dest: /etc/apt/keyrings/obg.gpg
     owner: root
     group: root
-    mode: '0644'
+    mode: "0644"
 
 - name: Add Taler-wise-server APT repo
   deb822_repository:
@@ -40,8 +40,8 @@
 - name: Install Taler-wise-server and Open Banking Gateway Debian packages
   apt:
     name:
-    - open-banking-gateway
-    - taler-wise-server
+      - open-banking-gateway
+      - taler-wise-server
     state: present
     update_cache: yes
 
@@ -51,7 +51,7 @@
     state: directory
     owner: obg
     group: obg
-    mode: '0755'
+    mode: "0755"
 
 - name: Generate application.yml from template
   template:
@@ -59,7 +59,7 @@
     dest: /opt/obg/config/application.yml
     owner: obg
     group: obg
-    mode: '0644'
+    mode: "0644"
 
 - name: Copy Taler-wise Server systemd service file
   template:
@@ -67,7 +67,7 @@
     dest: /etc/systemd/system/taler-wise-server.service
     group: obg
     owner: obg
-    mode: '0644'
+    mode: "0644"
   notify: Reload systemd
 
 - name: Copy OBG systemd service file
@@ -76,8 +76,16 @@
     dest: /etc/systemd/system/obg.service
     owner: obg
     group: obg
-    mode: '0644'
+    mode: "0644"
   notify: Reload systemd
+
+- name: Copy PKCS12 keystore file
+  copy:
+    src: xs2a_testcert_customer_rsa.p12
+    dest: /opt/obg/config/xs2a_testcert_customer_rsa.p12
+    owner: obg
+    group: obg
+    mode: "0644"
 
 - name: Ensure Taler-wise Server service is enabled and started
   systemd:

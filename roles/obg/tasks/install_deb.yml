@@ -7,9 +7,9 @@
     group: root
     mode: '0644'
 
-- name: Add Open Banking Gateway APT repo
+- name: Add Taler-wise-server APT repo
   deb822_repository:
-    name: OBG
+    name: TALERWISE
     types: deb
     uris: https://opba-fintech-deb.obgdeb.com/debian/
     suites: jammy
@@ -26,11 +26,39 @@
     state: absent
     purge: yes
 
-- name: Install Taler-wise-server and Open Banking Gateway Debian packages
+- name: Install Taler-wise-server package
   apt:
     name:
-    - open-banking-gateway
-    - taler-wise-server
+      - taler-wise-server
+    state: present
+    update_cache: yes
+
+- name: Add Open Banking Gateway APT repo
+  deb822_repository:
+    name: OBG
+    types: deb
+    uris: https://opba-deb.obgdeb.com/debian/
+    suites: jammy
+    components:
+      - main
+    architectures: amd64
+    signed_by: /etc/apt/keyrings/obg.gpg
+
+# --- Pinning Section ---
+- name: Pin open-banking-gateway package to OBG repo
+  copy:
+    dest: /etc/apt/preferences.d/open-banking-gateway
+    content: |
+      Package: open-banking-gateway
+      Pin: origin "opba-deb.obgdeb.com"
+      Pin-Priority: 1001
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Install Open Banking Gateway package
+  apt:
+    name: open-banking-gateway
     state: present
     update_cache: yes
 
@@ -67,6 +95,14 @@
     group: obg
     mode: '0644'
   notify: Reload systemd
+
+- name: Copy PKCS12 keystore file
+  copy:
+    src: xs2a-testcert-customer-rsa.p12
+    dest: /opt/obg/config/xs2a-testcert-customer-rsa.p12
+    owner: obg
+    group: obg
+    mode: "0644"
 
 - name: Ensure Taler-wise Server service is enabled and started
   systemd:
